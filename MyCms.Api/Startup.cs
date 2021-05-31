@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MyCms.Data.Context;
+using MyCms.IoC.DependencyInjections;
 
 namespace MyCms.Api
 {
@@ -41,6 +42,11 @@ namespace MyCms.Api
 
             #endregion
 
+            #region Add IoC
+
+            RegisterServices(services);
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +74,11 @@ namespace MyCms.Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public static void RegisterServices(IServiceCollection service)
+        {
+            DependencyContainer.RegisterServices(service);
         }
     }
 }
