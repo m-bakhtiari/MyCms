@@ -1,41 +1,41 @@
-﻿using MyCms.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyCms.Core.ViewModels;
+using MyCms.Domain.Entities;
 
 namespace MyCms.Core.Interfaces
 {
-    public interface IRoleService
+    public interface ICategoryService
     {
         #region Fetch Data
 
         /// <summary>
-        /// Get role data by role id
+        /// Get Category data by Category id
         /// </summary>
-        /// <param name="roleId"></param>
+        /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<Role> GetRoleByRoleIdAsync(int roleId);
+        Task<Category> GetCategoryByCategoryIdAsync(int categoryId);
 
         #endregion
 
         #region Add Or Update
 
         /// <summary>
-        /// add role
+        /// add Category
         /// </summary>
-        /// <param name="rolesViewModel"></param>
+        /// <param name="categoryViewModel"></param>
         /// <returns></returns>
-        Task<OpRes> AddAsync(RolesViewModel rolesViewModel);
+        Task<OpRes> AddAsync(CategoryViewModel categoryViewModel);
 
         /// <summary>
-        /// update role
+        /// update Category
         /// </summary>
-        /// <param name="rolesViewModel"></param>
+        /// <param name="categoryViewModel"></param>
         /// <returns></returns>
-        Task<OpRes> UpdateAsync(RolesViewModel rolesViewModel);
+        Task<OpRes> UpdateAsync(CategoryViewModel categoryViewModel);
 
         #endregion
 
@@ -44,9 +44,9 @@ namespace MyCms.Core.Interfaces
         /// <summary>
         /// Change is deleted to true value 
         /// </summary>
-        /// <param name="roleId"></param>
+        /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<OpRes> DeleteRoleAsync(int roleId);
+        Task<OpRes> DeleteCategoryAsync(int categoryId);
         #endregion
     }
 }

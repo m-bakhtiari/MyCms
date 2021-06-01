@@ -18,5 +18,14 @@ namespace MyCms.Core.Mapper
                 Id = rolesViewModel.Id
             };
         }
+
+        public static Category ToCategory(CategoryViewModel categoryViewModel)
+        {
+            return new Category()
+            {
+                Id = categoryViewModel.Id,
+                Name = categoryViewModel.Name
+            };
+        }
     }
 }

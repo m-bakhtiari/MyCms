@@ -4,34 +4,34 @@ using System.Threading.Tasks;
 
 namespace MyCms.Domain.Interfaces
 {
-    public interface IRoleRepository : IAsyncDisposable
+    public interface ICategoryRepository : IAsyncDisposable
     {
         #region Fetch Data
 
         /// <summary>
-        /// Get role data by role id
+        /// Get category data by category id
         /// </summary>
-        /// <param name="roleId"></param>
+        /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<Role> GetRoleByRoleIdAsync(int roleId);
+        Task<Category> GetCategoryByCategoryIdAsync(int categoryId);
 
         #endregion
 
         #region Add Or Update
 
         /// <summary>
-        /// add role
+        /// add category
         /// </summary>
-        /// <param name="role"></param>
+        /// <param name="category"></param>
         /// <returns></returns>
-        Task AddAsync(Role role);
+        Task AddAsync(Category category);
 
         /// <summary>
-        /// update role
+        /// update category
         /// </summary>
-        /// <param name="role"></param>
+        /// <param name="category"></param>
         /// <returns></returns>
-        Task UpdateAsync(Role role);
+        Task UpdateAsync(Category category);
 
         #endregion
 
@@ -42,7 +42,7 @@ namespace MyCms.Domain.Interfaces
         /// </summary>
         /// <param name="roleId"></param>
         /// <returns></returns>
-        Task DeleteRoleAsync(int roleId);
+        Task DeleteCategoryAsync(int roleId);
         #endregion
 
         #region Save Changes
@@ -54,6 +54,5 @@ namespace MyCms.Domain.Interfaces
         Task SaveChangesAsync();
 
         #endregion
-
     }
 }

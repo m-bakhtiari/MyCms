@@ -19,29 +19,27 @@ namespace MyCms.Data.Repositories
             _context = context;
         }
 
-        public async Task AddOrUpdateAsync(Role role)
+        public async Task AddAsync(Role role)
         {
-            if (role.Id == 0)
+            await _context.Roles.AddAsync(role);
+        }
+
+        public async Task UpdateAsync(Role role)
+        {
+            var oldRole = await _context.Roles.FindAsync(role.Id);
+            if (oldRole != null)
             {
-                await _context.Roles.AddAsync(role);
-            }
-            else
-            {
-                var oldRole = await _context.Roles.FindAsync(role.Id);
-                if (oldRole != null)
-                {
-                    oldRole.Title = role.Title;
-                }
+                oldRole.Title = role.Title;
             }
         }
 
         public async Task DeleteRoleAsync(int roleId)
         {
-            var role = await _context.Roles.FirstOrDefaultAsync(x => x.Id == roleId);
+            var role = await _context.Roles.FindAsync(roleId);
             role.IsDeleted = true;
         }
 
-        public async void Dispose()
+        public async ValueTask DisposeAsync()
         {
             await _context.DisposeAsync();
         }

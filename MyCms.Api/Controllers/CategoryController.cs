@@ -1,46 +1,43 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MyCms.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MyCms.Core.Extensions;
-using MyCms.Core.Interfaces;
 using MyCms.Core.ViewModels;
-using MyCms.Domain.Entities;
 
 namespace MyCms.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RolesController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         #region Constructor
 
-        private readonly IRoleService _roleService;
+        private readonly ICategoryService _categoryService;
 
-        public RolesController(IRoleService roleService)
+        public CategoryController(ICategoryService categoryService)
         {
-            _roleService = roleService;
+            _categoryService = categoryService;
         }
-
         #endregion
 
-        // GET: api/Roles
+        // GET: api/Category
         [HttpGet]
-        public async Task<IActionResult> GetRoles()
+        public async Task<IActionResult> GetCategory()
         {
-            //TODO Get Roles In One Method With Paging And Without Paging
+            //TODO Get Category In One Method With Paging And Without Paging
 
             return Ok();
         }
 
-        // GET: api/Roles/5
+        // GET: api/Category/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRole(int id)
         {
-            var role = await _roleService.GetRoleByRoleIdAsync(id);
+            var role = await _categoryService.GetCategoryByCategoryIdAsync(id);
 
             if (role == null)
             {
@@ -50,17 +47,17 @@ namespace MyCms.Api.Controllers
             return Ok(role);
         }
 
-        // PUT: api/Roles/5
+        // PUT: api/Category/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRole(int id, RolesViewModel rolesViewModel)
+        public async Task<IActionResult> PutRole(int id, CategoryViewModel categoryViewModel)
         {
-            if (id != rolesViewModel.Id)
+            if (id != categoryViewModel.Id)
             {
                 return BadRequest();
             }
 
-            var res = await _roleService.UpdateAsync(rolesViewModel);
+            var res = await _categoryService.UpdateAsync(categoryViewModel);
             if (res.IsSuccess == false)
             {
                 return res.ToBadRequestError();
@@ -68,12 +65,12 @@ namespace MyCms.Api.Controllers
             return Ok();
         }
 
-        // POST: api/Roles
+        // POST: api/Category
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult> PostRole(RolesViewModel rolesViewModel)
+        public async Task<ActionResult> PostRole(CategoryViewModel CategoryViewModel)
         {
-            var res = await _roleService.AddAsync(rolesViewModel);
+            var res = await _categoryService.AddAsync(CategoryViewModel);
             if (res.IsSuccess == false)
             {
                 return res.ToBadRequestError();
@@ -81,11 +78,11 @@ namespace MyCms.Api.Controllers
             return Ok();
         }
 
-        // DELETE: api/Roles/5
+        // DELETE: api/Category/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRole(int id)
         {
-            var role = await _roleService.DeleteRoleAsync(id);
+            var role = await _categoryService.DeleteCategoryAsync(id);
             if (role.IsSuccess == false)
             {
                 return NotFound();

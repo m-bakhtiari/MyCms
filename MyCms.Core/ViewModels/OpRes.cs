@@ -81,22 +81,22 @@ namespace MyCms.Core.ViewModels
         public Exception Exception { get; set; }
     }
 
-    public class OPRes<T> : OpRes
+    public class OpRes<T> : OpRes
     {
         public T Result { get; protected set; }
 
-        public static OPRes<T> BuildSuccess(T value)
+        public static OpRes<T> BuildSuccess(T value)
         {
-            return new OPRes<T>()
+            return new OpRes<T>()
             {
                 IsSuccess = true,
                 Result = value
             };
         }
 
-        public new static OPRes<T> BuildError(OpRes error)
+        public new static OpRes<T> BuildError(OpRes error)
         {
-            return new OPRes<T>()
+            return new OpRes<T>()
             {
                 IsSuccess = false,
                 Error = new OperationErrorResult()
@@ -108,29 +108,29 @@ namespace MyCms.Core.ViewModels
             };
         }
 
-        public new static OPRes<T> BuildError(ErrorTypes type, string message)
+        public new static OpRes<T> BuildError(ErrorTypes type, string message)
         {
             return BuildError(type, message, null);
         }
 
-        public new static OPRes<T> BuildError(string message)
+        public new static OpRes<T> BuildError(string message)
         {
             return BuildError(ErrorTypes.Unknown, message, null);
         }
 
-        public new static OPRes<T> BuildError(string message, Exception exception)
+        public new static OpRes<T> BuildError(string message, Exception exception)
         {
             return BuildError(ErrorTypes.Unknown, message, exception);
         }
 
-        public new static OPRes<T> BuildError(Exception exception)
+        public new static OpRes<T> BuildError(Exception exception)
         {
             return BuildError(ErrorTypes.Unknown, null, exception);
         }
 
-        public new static OPRes<T> BuildError(ErrorTypes type, string message, Exception exception)
+        public new static OpRes<T> BuildError(ErrorTypes type, string message, Exception exception)
         {
-            return new OPRes<T>()
+            return new OpRes<T>()
             {
                 IsSuccess = false,
                 Error = new OperationErrorResult

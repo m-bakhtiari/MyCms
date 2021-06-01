@@ -21,7 +21,7 @@ namespace MyCms.Core.Services
             return await _roleRepository.GetRoleByRoleIdAsync(roleId);
         }
 
-        public async Task<OpRes> AddOrUpdateAsync(RolesViewModel rolesViewModel)
+        public async Task<OpRes> AddAsync(RolesViewModel rolesViewModel)
         {
             var error = RoleValidate(rolesViewModel);
             if (error.IsNullOrWhiteSpace() == false)
@@ -31,7 +31,22 @@ namespace MyCms.Core.Services
 
             var role = MapViewModelToEntity.ToRole(rolesViewModel);
 
-            await _roleRepository.AddOrUpdateAsync(role);
+            await _roleRepository.AddAsync(role);
+            await _roleRepository.SaveChangesAsync();
+            return OpRes.BuildSuccess();
+        }
+
+        public async Task<OpRes> UpdateAsync(RolesViewModel rolesViewModel)
+        {
+            var error = RoleValidate(rolesViewModel);
+            if (error.IsNullOrWhiteSpace() == false)
+            {
+                return OpRes.BuildError(error);
+            }
+
+            var role = MapViewModelToEntity.ToRole(rolesViewModel);
+
+            await _roleRepository.UpdateAsync(role);
             await _roleRepository.SaveChangesAsync();
             return OpRes.BuildSuccess();
         }
