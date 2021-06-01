@@ -18,20 +18,13 @@ namespace MyCms.Domain.Entities
 
         [Required]
         [MaxLength(500)]
-        public string Username { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [MaxLength(500)]
         public string Password { get; set; }
 
         public DateTime CreateAt { get; set; }
-
-        [MaxLength(50)]
-        public string Mobile { get; set; }
-
-        [MaxLength(500)]
-        [EmailAddress]
-        public string Email { get; set; }
 
         public bool IsDeleted { get; set; }
 

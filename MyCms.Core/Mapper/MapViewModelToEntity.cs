@@ -10,15 +10,6 @@ namespace MyCms.Core.Mapper
 {
     public class MapViewModelToEntity
     {
-        public static Role ToRole(RolesViewModel rolesViewModel)
-        {
-            return new Role()
-            {
-                Title = rolesViewModel.Title,
-                Id = rolesViewModel.Id
-            };
-        }
-
         public static Category ToCategory(CategoryViewModel categoryViewModel)
         {
             return new Category()

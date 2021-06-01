@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyCms.Core.ViewModels;
 
-namespace MyCms.Core.Extensions
+namespace MyCms.Extensions.Extensions
 {
     public static class ErrorResponseExtensions
     {

@@ -10,8 +10,8 @@ using MyCms.Data.Context;
 namespace MyCms.Data.Migrations
 {
     [DbContext(typeof(MyCmsContext))]
-    [Migration("20210531144259_mig_CategoryRelation")]
-    partial class mig_CategoryRelation
+    [Migration("20210601202903_mig_InitialDatabase")]
+    partial class mig_InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -133,9 +133,7 @@ namespace MyCms.Data.Migrations
             modelBuilder.Entity("MyCms.Domain.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -148,6 +146,20 @@ namespace MyCms.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1001,
+                            IsDeleted = false,
+                            Title = "User"
+                        },
+                        new
+                        {
+                            Id = 1002,
+                            IsDeleted = false,
+                            Title = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("MyCms.Domain.Entities.User", b =>
@@ -161,22 +173,14 @@ namespace MyCms.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Mobile")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");

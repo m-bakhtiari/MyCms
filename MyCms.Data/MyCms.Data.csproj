@@ -15,6 +15,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyCms.Domain\MyCms.Domain.csproj" />
+    <ProjectReference Include="..\MyCms.Extensions\MyCms.Extensions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

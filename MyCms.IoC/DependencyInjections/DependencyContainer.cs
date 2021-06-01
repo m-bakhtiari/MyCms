@@ -12,15 +12,16 @@ namespace MyCms.IoC.DependencyInjections
         {
             #region Core Layer
 
-            service.AddScoped<IRoleService, RoleService>();
             service.AddScoped<ICategoryService, CategoryService>();
+            service.AddScoped<IUserService, UserService>();
 
             #endregion
 
             #region Data Layer
 
             service.AddScoped<ICategoryRepository, CategoryRepository>();
-            service.AddScoped<IRoleRepository, RoleRepository>();
+            service.AddScoped<IUserRepository, UserRepository>();
+            service.AddScoped<ISaveChangesRepository, SaveChangesRepository>();
 
             #endregion
         }

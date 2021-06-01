@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyCms.Core.ViewModels;
+using MyCms.Domain.Dto;
 using MyCms.Domain.Entities;
 
 namespace MyCms.Core.Interfaces
@@ -18,6 +19,13 @@ namespace MyCms.Core.Interfaces
         /// <param name="categoryId"></param>
         /// <returns></returns>
         Task<Category> GetCategoryByCategoryIdAsync(int categoryId);
+
+        /// <summary>
+        /// get category by paging and search in items 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        Task<PagedResult<Category, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item);
 
         #endregion
 

@@ -11,7 +11,7 @@ namespace MyCms.Core.Extensions
         /// </summary>
         /// <param name="pass"></param>
         /// <returns></returns>
-        public static string EncodePasswordMd5(string pass) //Encrypt using MD5   
+        public static string EncodePasswordMd5(this string pass) //Encrypt using MD5   
         {
             Byte[] originalBytes;
             Byte[] encodedBytes;

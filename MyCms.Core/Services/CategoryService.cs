@@ -2,6 +2,7 @@
 using MyCms.Core.Interfaces;
 using MyCms.Core.Mapper;
 using MyCms.Core.ViewModels;
+using MyCms.Domain.Dto;
 using MyCms.Domain.Entities;
 using MyCms.Domain.Interfaces;
 using System.Threading.Tasks;
@@ -11,10 +12,12 @@ namespace MyCms.Core.Services
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ISaveChangesRepository _saveChangesRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        public CategoryService(ICategoryRepository categoryRepository, ISaveChangesRepository saveChangesRepository)
         {
             _categoryRepository = categoryRepository;
+            _saveChangesRepository = saveChangesRepository;
         }
         public async Task<Category> GetCategoryByCategoryIdAsync(int categoryId)
         {
@@ -32,7 +35,7 @@ namespace MyCms.Core.Services
             var category = MapViewModelToEntity.ToCategory(categoryViewModel);
 
             await _categoryRepository.AddAsync(category);
-            await _categoryRepository.SaveChangesAsync();
+            await _saveChangesRepository.SaveChangesAsync();
             return OpRes.BuildSuccess();
         }
 
@@ -47,7 +50,7 @@ namespace MyCms.Core.Services
             var category = MapViewModelToEntity.ToCategory(categoryViewModel);
 
             await _categoryRepository.UpdateAsync(category);
-            await _categoryRepository.SaveChangesAsync();
+            await _saveChangesRepository.SaveChangesAsync();
             return OpRes.BuildSuccess();
         }
 
@@ -59,7 +62,7 @@ namespace MyCms.Core.Services
                 return OpRes.BuildError("Not Found");
             }
             await _categoryRepository.DeleteCategoryAsync(categoryId);
-            await _categoryRepository.SaveChangesAsync();
+            await _saveChangesRepository.SaveChangesAsync();
             return OpRes.BuildSuccess();
         }
 
@@ -71,6 +74,11 @@ namespace MyCms.Core.Services
             }
 
             return null;
+        }
+
+        public async Task<PagedResult<Category, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item)
+        {
+            return await _categoryRepository.GetCategoryByPaging(item);
         }
     }
 }

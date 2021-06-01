@@ -53,6 +53,8 @@ namespace MyCms.Data.Context
             modelBuilder.Entity<NewsComment>().HasQueryFilter(u => !u.IsDeleted);
             modelBuilder.Entity<Category>().HasQueryFilter(u => !u.IsDeleted);
 
+            modelBuilder.Entity<Role>().HasData(new Role() { Id = 1001, IsDeleted = false, Title = "User" }
+                , new Role() { Id = 1002, IsDeleted = false, Title = "Admin" });
         }
 
         #endregion

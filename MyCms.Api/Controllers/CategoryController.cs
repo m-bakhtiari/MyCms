@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using MyCms.Core.Extensions;
 using MyCms.Core.ViewModels;
+using MyCms.Domain.Dto;
+using MyCms.Extensions.Extensions;
 
 namespace MyCms.Api.Controllers
 {
@@ -26,31 +28,30 @@ namespace MyCms.Api.Controllers
 
         // GET: api/Category
         [HttpGet]
-        public async Task<IActionResult> GetCategory()
+        public async Task<IActionResult> GetCategory(CategorySearchItem item)
         {
-            //TODO Get Category In One Method With Paging And Without Paging
-
-            return Ok();
+            var res = await _categoryService.GetCategoryByPaging(item);
+            return Ok(res);
         }
 
         // GET: api/Category/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRole(int id)
+        public async Task<IActionResult> GetCategory(int id)
         {
-            var role = await _categoryService.GetCategoryByCategoryIdAsync(id);
+            var category = await _categoryService.GetCategoryByCategoryIdAsync(id);
 
-            if (role == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return Ok(role);
+            return Ok(category);
         }
 
         // PUT: api/Category/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRole(int id, CategoryViewModel categoryViewModel)
+        public async Task<IActionResult> PutCategory(int id, CategoryViewModel categoryViewModel)
         {
             if (id != categoryViewModel.Id)
             {
@@ -68,7 +69,7 @@ namespace MyCms.Api.Controllers
         // POST: api/Category
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult> PostRole(CategoryViewModel CategoryViewModel)
+        public async Task<ActionResult> PostCategory(CategoryViewModel CategoryViewModel)
         {
             var res = await _categoryService.AddAsync(CategoryViewModel);
             if (res.IsSuccess == false)
@@ -80,7 +81,7 @@ namespace MyCms.Api.Controllers
 
         // DELETE: api/Category/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRole(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             var role = await _categoryService.DeleteCategoryAsync(id);
             if (role.IsSuccess == false)
