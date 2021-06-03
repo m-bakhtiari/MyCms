@@ -1,19 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MyCms.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MyCms.Core.Extensions;
+using MyCms.Core.Services;
 using MyCms.Core.ViewModels;
 using MyCms.Domain.Dto;
 using MyCms.Extensions.Extensions;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyCms.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [PermissionChecker]
     public class CategoryController : ControllerBase
     {
         #region Constructor
@@ -28,6 +26,7 @@ namespace MyCms.Api.Controllers
 
         // GET: api/Category
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCategory(CategorySearchItem item)
         {
             var res = await _categoryService.GetCategoryByPaging(item);
@@ -36,6 +35,7 @@ namespace MyCms.Api.Controllers
 
         // GET: api/Category/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCategory(int id)
         {
             var category = await _categoryService.GetCategoryByCategoryIdAsync(id);

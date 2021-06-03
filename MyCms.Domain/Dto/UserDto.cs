@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCms.Core.ViewModels
+namespace MyCms.Domain.Dto
 {
-    public class UserViewModel
+    public class UserDto
     {
+        public int UserId { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
-        public bool IsAdmin { get; set; }
+        public DateTime CreateAt { get; set; }
     }
 }

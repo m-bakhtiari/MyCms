@@ -20,7 +20,6 @@ namespace MyCms.Domain.Interfaces
         /// <summary>
         /// get category by paging and search in items 
         /// </summary>
-        /// <param name="hasPaging"></param>
         /// <param name="item"></param>
         /// <returns></returns>
         Task<PagedResult<Category, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item);

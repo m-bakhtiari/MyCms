@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MyCms.Core.Services;
 using MyCms.Core.ViewModels;
+using MyCms.Domain.Dto;
 using MyCms.Domain.Entities;
 
 namespace MyCms.Core.Interfaces
@@ -12,20 +14,19 @@ namespace MyCms.Core.Interfaces
     {
         #region Add Or Update User
 
-        Task<OpRes> AddUserAsync(UserViewModel userViewModel);
-
-        Task<OpRes> AddAdminAsync(UserViewModel userViewModel);
+        Task<OpRes> RegisterUser(UserViewModel userViewModel);
         #endregion
 
         #region Get User
 
         Task<User> GetUserByUserId(int userId);
+        Task<OpRes<PagedResult<UserDto, UserSearchItem>>> GetUserByPaging(UserSearchItem item);
 
         #endregion
 
         #region Validations
 
-        Task<User> LoginUser(UserViewModel user);
+        Task<User> LoginUser(LoginViewModel user);
 
         Task<bool> IsUserInAdmin(int userId);
 

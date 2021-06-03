@@ -22,6 +22,7 @@ namespace MyCms.IoC.DependencyInjections
             service.AddScoped<ICategoryRepository, CategoryRepository>();
             service.AddScoped<IUserRepository, UserRepository>();
             service.AddScoped<ISaveChangesRepository, SaveChangesRepository>();
+            service.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
             #endregion
         }

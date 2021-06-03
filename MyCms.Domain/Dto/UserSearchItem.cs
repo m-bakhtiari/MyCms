@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyCms.Domain.Dto;
 
-namespace MyCms.Core.ViewModels
+namespace MyCms.Domain.Dto
 {
-    public class CategoryPagingViewModel : BaseSearchItem
+    public class UserSearchItem : BaseSearchItem
     {
-
+        public string Email { get; set; }
     }
 }
