@@ -76,7 +76,7 @@ namespace MyCms.Core.Services
             return null;
         }
 
-        public async Task<PagedResult<Category, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item)
+        public async Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item)
         {
             return await _categoryRepository.GetCategoryByPaging(item);
         }

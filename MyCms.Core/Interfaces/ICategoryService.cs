@@ -25,7 +25,7 @@ namespace MyCms.Core.Interfaces
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        Task<PagedResult<Category, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item);
+        Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item);
 
         #endregion
 

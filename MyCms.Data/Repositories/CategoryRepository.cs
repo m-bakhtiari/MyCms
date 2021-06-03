@@ -21,16 +21,16 @@ namespace MyCms.Data.Repositories
             _context = context;
         }
 
-        public async Task<PagedResult<Category, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item)
+        public async Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item)
         {
-            var res = new PagedResult<Category, CategorySearchItem>() { Items = new List<Category>(), SearchItem = item };
+            var res = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>(), SearchItem = item };
+            IQueryable<Category> categories = _context.Categories;
             if (item.HasPaging == false)
             {
-                res.Items = await _context.Categories.ToListAsync();
+                res.Items = await categories.Select(c => new CategoryDto() { Id = c.Id, Title = c.Name }).ToListAsync();
             }
             else
             {
-                IQueryable<Category> categories = _context.Categories;
                 var count = await categories.CountAsync();
                 res.CountAll = count;
                 res.ItemPerPage = item.ItemPerPage.Value;
@@ -39,7 +39,7 @@ namespace MyCms.Data.Repositories
                     categories = categories.Where(x => x.Name.Contains(item.Title));
                 }
                 categories = categories.Skip((item.PageId.Value - 1) * item.ItemPerPage.Value).Take(item.ItemPerPage.Value);
-                res.Items = await categories.ToListAsync();
+                res.Items = await categories.Select(c => new CategoryDto() { Id = c.Id, Title = c.Name }).ToListAsync();
                 res.CurrentPage = item.CurrentPage.Value;
             }
 
@@ -50,8 +50,6 @@ namespace MyCms.Data.Repositories
         {
             await _context.Categories.AddAsync(category);
         }
-
-
 
         public async Task UpdateAsync(Category category)
         {
@@ -73,9 +71,10 @@ namespace MyCms.Data.Repositories
             await _context.DisposeAsync();
         }
 
-        public async Task<Category> GetCategoryByCategoryIdAsync(int categoryId)
+        public async Task<CategoryDto> GetCategoryByCategoryIdAsync(int categoryId)
         {
-            return await _context.Categories.FindAsync(categoryId);
+            return await _context.Categories.Select(c => new CategoryDto() { Id = c.Id, Title = c.Name })
+                .FirstOrDefaultAsync(x => x.Id == categoryId);
         }
     }
 }

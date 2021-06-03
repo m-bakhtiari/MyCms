@@ -1,46 +1,45 @@
 ﻿using MyCms.Domain.Dto;
 using MyCms.Domain.Entities;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MyCms.Domain.Interfaces
 {
-    public interface ICategoryRepository : IAsyncDisposable
+    public interface INewsRepository : IAsyncDisposable
     {
         #region Fetch Data
 
         /// <summary>
-        /// Get category data by category id
+        /// Get News data by News id
         /// </summary>
-        /// <param name="categoryId"></param>
+        /// <param name="newsId"></param>
         /// <returns></returns>
-        Task<CategoryDto> GetCategoryByCategoryIdAsync(int categoryId);
+        Task<NewsDto> GetNewsByNewsIdAsync(int newsId);
 
         /// <summary>
-        /// get category by paging and search in items 
+        /// get News by paging and search in items 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item);
+        Task<PagedResult<NewsDto, NewsSearchItem>> GetNewsByPaging(NewsSearchItem item);
 
         #endregion
 
         #region Add Or Update
 
         /// <summary>
-        /// add category
+        /// add News
         /// </summary>
-        /// <param name="category"></param>
+        /// <param name="news"></param>
         /// <returns></returns>
-        Task AddAsync(Category category);
+        Task AddAsync(News news);
 
         /// <summary>
-        /// update category
+        /// update News
         /// </summary>
-        /// <param name="category"></param>
+        /// <param name="news"></param>
         /// <returns></returns>
-        Task UpdateAsync(Category category);
+        void UpdateAsync(News news);
 
         #endregion
 
@@ -49,9 +48,9 @@ namespace MyCms.Domain.Interfaces
         /// <summary>
         /// Change is deleted to true value 
         /// </summary>
-        /// <param name="roleId"></param>
+        /// <param name="newsId"></param>
         /// <returns></returns>
-        Task DeleteCategoryAsync(int roleId);
+        Task DeleteNewsAsync(int newsId);
         #endregion
     }
 }
