@@ -14,6 +14,7 @@ namespace MyCms.IoC.DependencyInjections
 
             service.AddScoped<ICategoryService, CategoryService>();
             service.AddScoped<IUserService, UserService>();
+            service.AddScoped<INewsService, NewsService>();
 
             #endregion
 
@@ -23,6 +24,7 @@ namespace MyCms.IoC.DependencyInjections
             service.AddScoped<IUserRepository, UserRepository>();
             service.AddScoped<ISaveChangesRepository, SaveChangesRepository>();
             service.AddScoped<IUserRoleRepository, UserRoleRepository>();
+            service.AddScoped<INewsRepository, NewsRepository>();
 
             #endregion
         }

@@ -13,5 +13,6 @@ namespace MyCms.Extensions.Consts
         public const string SiteUrl = "https://localhost:44380";
         public const string SiteUrlHttp = "http://localhost:53221";
         public const string VerifyCodeJwt = "this is my custom Secret key for authnetication";
+        public const string NewsImageLocation = "wwwroot/img/NewsImage";
     }
 }

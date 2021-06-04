@@ -11,5 +11,6 @@ namespace MyCms.Domain.Dto
         public string ImageName { get; set; }
         public string Tags { get; set; }
         public DateTime CreateAt { get; set; }
+        public string CategoryTitle { get; set; }
     }
 }

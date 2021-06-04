@@ -22,4 +22,8 @@
     <ProjectReference Include="..\MyCms.IoC\MyCms.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\NewsImage\" />
+  </ItemGroup>
+
 </Project>

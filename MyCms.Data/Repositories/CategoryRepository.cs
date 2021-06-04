@@ -24,10 +24,10 @@ namespace MyCms.Data.Repositories
         public async Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item)
         {
             var res = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>(), SearchItem = item };
-            IQueryable<Category> categories = _context.Categories;
+            var categories = _context.Categories.Select(c => new CategoryDto() { Id = c.Id, Title = c.Name });
             if (item.HasPaging == false)
             {
-                res.Items = await categories.Select(c => new CategoryDto() { Id = c.Id, Title = c.Name }).ToListAsync();
+                res.Items = await categories.ToListAsync();
             }
             else
             {
@@ -36,10 +36,10 @@ namespace MyCms.Data.Repositories
                 res.ItemPerPage = item.ItemPerPage.Value;
                 if (item.Title.IsNullOrWhiteSpace() == false)
                 {
-                    categories = categories.Where(x => x.Name.Contains(item.Title));
+                    categories = categories.Where(x => x.Title.Contains(item.Title));
                 }
                 categories = categories.Skip((item.PageId.Value - 1) * item.ItemPerPage.Value).Take(item.ItemPerPage.Value);
-                res.Items = await categories.Select(c => new CategoryDto() { Id = c.Id, Title = c.Name }).ToListAsync();
+                res.Items = await categories.ToListAsync();
                 res.CurrentPage = item.CurrentPage.Value;
             }
 

@@ -32,14 +32,14 @@ namespace MyCms.Data.Repositories
         public async Task<PagedResult<UserDto, UserSearchItem>> GetUserByPaging(UserSearchItem item)
         {
             var res = new PagedResult<UserDto, UserSearchItem>() { Items = new List<UserDto>(), SearchItem = item };
-            IQueryable<User> users = _context.Users;
+            var users = _context.Users.Select(u => new UserDto()
+            {
+                Email = u.Email,
+                CreateAt = u.CreateAt
+            });
             if (item.HasPaging == false)
             {
-                res.Items = await _context.Users.Select(u => new UserDto()
-                {
-                    Email = u.Email,
-                    CreateAt = u.CreateAt
-                }).ToListAsync();
+                res.Items = await users.ToListAsync();
             }
             else
             {
@@ -51,12 +51,7 @@ namespace MyCms.Data.Repositories
                     users = users.Where(x => x.Email.Contains(item.Email));
                 }
                 users = users.Skip((item.PageId.Value - 1) * item.ItemPerPage.Value).Take(item.ItemPerPage.Value);
-                res.Items = await users.Select(u => new UserDto()
-                {
-                    Email = u.Email,
-                    CreateAt = u.CreateAt,
-                    UserId = u.UserId
-                }).ToListAsync();
+                res.Items = await users.ToListAsync();
                 res.CurrentPage = item.CurrentPage.Value;
             }
 
