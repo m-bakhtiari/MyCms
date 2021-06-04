@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyCms.Core.Services;
+﻿using MyCms.Core.Services;
 using MyCms.Core.ViewModels;
 using MyCms.Domain.Dto;
 using MyCms.Domain.Entities;
+using System.Threading.Tasks;
 
 namespace MyCms.Core.Interfaces
 {

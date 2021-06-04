@@ -77,6 +77,7 @@ namespace MyCms.Core.Services
             var user = new User()
             {
                 Email = userViewModel.Email.ToLowerInvariant(),
+                FullName = userViewModel.FullName,
                 Password = userViewModel.Password.EncodePasswordMd5(),
                 CreateAt = DateTime.Now
             };

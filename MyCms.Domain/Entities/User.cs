@@ -24,6 +24,9 @@ namespace MyCms.Domain.Entities
         [MaxLength(500)]
         public string Password { get; set; }
 
+        [MaxLength(800)]
+        public string FullName { get; set; }
+
         public DateTime CreateAt { get; set; }
 
         public bool IsDeleted { get; set; }
