@@ -30,5 +30,19 @@ namespace MyCms.Core.Mapper
                 Tags = newsViewModel.Tags
             };
         }
+
+        public static NewsLike ToNewsLike(this NewsLikeViewModel newsLikeViewModel, int userId)
+        {
+            return new NewsLike()
+            {
+                NewsId = newsLikeViewModel.NewsId,
+                UserId = userId
+            };
+        }
+
+        public static NewsComment ToNewsComment(this NewsCommentViewModel comment, int userId)
+        {
+            return new NewsComment(comment.Text, userId, comment.ParentId);
+        }
     }
 }

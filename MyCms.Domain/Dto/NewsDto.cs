@@ -12,5 +12,6 @@ namespace MyCms.Domain.Dto
         public string Tags { get; set; }
         public DateTime CreateAt { get; set; }
         public string CategoryTitle { get; set; }
+        public int CategoryId { get; set; }
     }
 }

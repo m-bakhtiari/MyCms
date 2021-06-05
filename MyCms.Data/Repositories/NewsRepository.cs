@@ -52,16 +52,19 @@ namespace MyCms.Data.Repositories
         public async Task<PagedResult<NewsDto, NewsSearchItem>> GetNewsByPaging(NewsSearchItem item)
         {
             var res = new PagedResult<NewsDto, NewsSearchItem>() { Items = new List<NewsDto>(), SearchItem = item };
-            var news = _context.News.Include(x => x.Category).OrderByDescending(x => x.CreateAt).Select(x => new NewsDto()
-            {
-                Id = x.Id,
-                Title = x.Title,
-                CreateAt = x.CreateAt,
-                Description = x.Description,
-                ImageName = x.ImageName,
-                ShortDescription = x.ShortDescription,
-                Tags = x.Tags
-            });
+            var news = _context.News.Include(x => x.Category)
+                .OrderByDescending(x => x.CreateAt).Select(x => new NewsDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    CreateAt = x.CreateAt,
+                    Description = x.Description,
+                    ImageName = x.ImageName,
+                    ShortDescription = x.ShortDescription,
+                    Tags = x.Tags,
+                    CategoryId = x.CategoryId,
+                    CategoryTitle = x.Category.Name,
+                });
             if (item.HasPaging == false)
             {
                 res.Items = await news.ToListAsync();
@@ -77,6 +80,11 @@ namespace MyCms.Data.Repositories
                         x.Title.Contains(item.Title) || x.Description.Contains(item.Title) ||
                         x.ShortDescription.Contains(item.Title) || x.Tags.Contains(item.Title));
                 }
+
+                if (item.CategoryId != null)
+                {
+                    news = news.Where(x => x.CategoryId == item.CategoryId);
+                }
                 news = news.Skip((item.PageId.Value - 1) * item.ItemPerPage.Value).Take(item.ItemPerPage.Value);
                 res.Items = await news.ToListAsync();
                 res.CurrentPage = item.CurrentPage.Value;
@@ -89,5 +97,38 @@ namespace MyCms.Data.Repositories
         {
             _context.News.Update(news);
         }
+
+        public async Task<List<NewsDto>> GetTopFiveFavoriteNews()
+        {
+            return await _context.News.OrderByDescending(x => x.NewsLikes.Count).Take(5).Select(n => new NewsDto()
+            {
+                Id = n.Id,
+                Title = n.Title,
+                CreateAt = n.CreateAt,
+                Description = n.Description,
+                ImageName = n.ImageName,
+                ShortDescription = n.ShortDescription,
+                Tags = n.Tags,
+                CategoryId = n.CategoryId,
+                CategoryTitle = n.Category.Name,
+            }).ToListAsync();
+        }
+
+        public async Task<List<NewsDto>> GetTopTenNewsByComment()
+        {
+            return await _context.News.OrderByDescending(x => x.NewsComments.Count).Take(10).Select(n => new NewsDto()
+            {
+                Id = n.Id,
+                Title = n.Title,
+                CreateAt = n.CreateAt,
+                Description = n.Description,
+                ImageName = n.ImageName,
+                ShortDescription = n.ShortDescription,
+                Tags = n.Tags,
+                CategoryId = n.CategoryId,
+                CategoryTitle = n.Category.Name,
+            }).ToListAsync();
+        }
+
     }
 }

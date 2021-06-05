@@ -15,8 +15,9 @@ namespace MyCms.Domain.Dto
 
         public int UserId { get; set; }
 
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
 
         public string Username { get; set; }
+        public int NewsId { get; set; }
     }
 }

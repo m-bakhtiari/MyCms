@@ -9,6 +9,5 @@ namespace MyCms.Core.ViewModels
     public class NewsLikeViewModel
     {
         public int NewsId { get; set; }
-        public int UserId { get; set; }
     }
 }

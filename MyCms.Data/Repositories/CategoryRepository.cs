@@ -24,7 +24,12 @@ namespace MyCms.Data.Repositories
         public async Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item)
         {
             var res = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>(), SearchItem = item };
-            var categories = _context.Categories.Select(c => new CategoryDto() { Id = c.Id, Title = c.Name });
+            var categories = _context.Categories.Include(x => x.News).Select(c => new CategoryDto()
+            {
+                Id = c.Id,
+                Title = c.Name,
+                CategoryNewsCount = c.News.Count
+            });
             if (item.HasPaging == false)
             {
                 res.Items = await categories.ToListAsync();
@@ -75,6 +80,40 @@ namespace MyCms.Data.Repositories
         {
             return await _context.Categories.Select(c => new CategoryDto() { Id = c.Id, Title = c.Name })
                 .FirstOrDefaultAsync(x => x.Id == categoryId);
+        }
+
+        public async Task<List<CategoryDetailDto>> GetCategoryWithFirstNews()
+        {
+            return await _context.Categories.Include(x => x.News.OrderByDescending(n => n.CreateAt).FirstOrDefault())
+                .Where(x => x.News.Any()).Select(c => new CategoryDetailDto()
+                {
+                    NewsId = c.News.FirstOrDefault().Id,
+                    CategoryId = c.Id,
+                    CategoryTitle = c.Name,
+                    ImageName = c.News.FirstOrDefault().ImageName,
+                    NewsDate = c.News.FirstOrDefault().CreateAt,
+                    NewsTitle = c.News.FirstOrDefault().Title,
+                }).ToListAsync();
+        }
+
+        public async Task<List<CategoryDetailWithTopFiveNewsDto>> GetCategoryWithTopFiveNews()
+        {
+            return await _context.Categories.Include(x => x.News.OrderByDescending(n => n.CreateAt).Take(5))
+                .Where(x => x.News.Any()).Select(c => new CategoryDetailWithTopFiveNewsDto()
+                {
+                    NewsList = c.News.Select(a => new NewsDto()
+                    {
+                        Id = a.Id,
+                        Title = a.Title,
+                        CreateAt = a.CreateAt,
+                        Description = a.Description,
+                        ImageName = a.ImageName,
+                        ShortDescription = a.ShortDescription,
+                        Tags = a.Tags,
+                    }).ToList(),
+                    CategoryId = c.Id,
+                    CategoryTitle = c.Name,
+                }).ToListAsync();
         }
     }
 }

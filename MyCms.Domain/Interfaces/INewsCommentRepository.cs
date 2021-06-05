@@ -9,6 +9,7 @@ namespace MyCms.Domain.Interfaces
     {
         Task AddAsync(NewsComment comment);
         Task DeleteAsync(int commentId);
-        Task<PagedResult<NewsCommentDto,BaseSearchItem>> GetCommentByNewsId(int commentId,BaseSearchItem item);
+        Task<PagedResult<NewsCommentDto, NewsCommentSearchItem>> GetCommentByNewsId(NewsCommentSearchItem item);
+        Task<NewsComment> GetCommentByCommentId(int commentId);
     }
 }

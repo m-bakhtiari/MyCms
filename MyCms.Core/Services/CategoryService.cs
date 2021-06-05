@@ -5,6 +5,7 @@ using MyCms.Core.ViewModels;
 using MyCms.Domain.Dto;
 using MyCms.Domain.Entities;
 using MyCms.Domain.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MyCms.Core.Services
@@ -19,7 +20,7 @@ namespace MyCms.Core.Services
             _categoryRepository = categoryRepository;
             _saveChangesRepository = saveChangesRepository;
         }
-        public async Task<Category> GetCategoryByCategoryIdAsync(int categoryId)
+        public async Task<CategoryDto> GetCategoryByCategoryIdAsync(int categoryId)
         {
             return await _categoryRepository.GetCategoryByCategoryIdAsync(categoryId);
         }
@@ -79,6 +80,16 @@ namespace MyCms.Core.Services
         public async Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item)
         {
             return await _categoryRepository.GetCategoryByPaging(item);
+        }
+
+        public async Task<List<CategoryDetailDto>> GetCategoryWIthFirstNews()
+        {
+            return await _categoryRepository.GetCategoryWithFirstNews();
+        }
+
+        public async Task<List<CategoryDetailWithTopFiveNewsDto>> GetCategoryWithTopFiveNews()
+        {
+            return await _categoryRepository.GetCategoryWithTopFiveNews();
         }
     }
 }

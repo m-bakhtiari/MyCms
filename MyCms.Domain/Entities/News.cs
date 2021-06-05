@@ -49,6 +49,8 @@ namespace MyCms.Domain.Entities
 
         public ICollection<NewsLike> NewsLikes { get; set; }
 
+        public ICollection<NewsComment> NewsComments { get; set; }
+
         #endregion
     }
 }

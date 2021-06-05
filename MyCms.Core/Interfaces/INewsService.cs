@@ -1,4 +1,5 @@
-﻿using MyCms.Core.ViewModels;
+﻿using System.Collections.Generic;
+using MyCms.Core.ViewModels;
 using MyCms.Domain.Dto;
 using System.Threading.Tasks;
 
@@ -11,6 +12,10 @@ namespace MyCms.Core.Interfaces
         Task<NewsDto> GetNewsByNewsId(int newsId);
         Task<PagedResult<NewsDto, NewsSearchItem>> GetNewsByPaging(NewsSearchItem item);
 
+        Task<List<NewsDto>> GetTopTenNewsByComment();
+
+        Task<List<NewsDto>> GetTopFiveFavoriteNews();
+
         #endregion
 
         Task<OpRes> AddNewsAsync(NewsViewModel news);
@@ -19,18 +24,17 @@ namespace MyCms.Core.Interfaces
 
         #region News Comments
 
-        Task AddAsync(NewsCommentViewModel comment);
-        Task AddResponseCommentAsync(NewsCommentViewModel comment);
-        Task DeleteCommentAsync(int commentId);
-        Task<PagedResult<NewsCommentDto, BaseSearchItem>> GetCommentByNewsId(int commentId, BaseSearchItem item);
+        Task<OpRes> AddCommentAsync(NewsCommentViewModel comment, int userId);
+        Task<OpRes> DeleteCommentAsync(int commentId);
+
+        Task<PagedResult<NewsCommentDto, NewsCommentSearchItem>> GetCommentByNewsId(NewsCommentSearchItem item);
 
         #endregion
 
         #region News Likes
 
-        Task AddAsync(NewsLikeViewModel newsLike);
-        Task DeleteAsync(int newsId, int userId);
-        Task<int> CountByNewsId(int newsId);
+        Task<OpRes> AddOrDeleteNewsLikeAsync(NewsLikeViewModel newsLike, int userId);
+        Task<int> NewsLikeCountByNewsId(int newsId);
 
         #endregion
     }

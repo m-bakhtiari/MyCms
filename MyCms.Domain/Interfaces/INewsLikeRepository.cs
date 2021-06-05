@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 
 namespace MyCms.Domain.Interfaces
 {
-    public interface INewsLikeRepository:IAsyncDisposable
+    public interface INewsLikeRepository : IAsyncDisposable
     {
         Task AddAsync(NewsLike newsLike);
         Task DeleteAsync(int newsId, int userId);
         Task<int> CountByNewsId(int newsId);
+        Task<bool> IsUserLikeNews(int newsId, int userId);
     }
 }

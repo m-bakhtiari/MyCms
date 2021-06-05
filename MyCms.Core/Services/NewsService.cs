@@ -19,13 +19,16 @@ namespace MyCms.Core.Services
     {
         private readonly INewsRepository _newsRepository;
         private readonly ISaveChangesRepository _saveChangesRepository;
+        private readonly INewsLikeRepository _newsLikeRepository;
+        private readonly INewsCommentRepository _newsCommentRepository;
 
-        public NewsService(INewsRepository newsRepository, ISaveChangesRepository saveChangesRepository)
+        public NewsService(INewsRepository newsRepository, ISaveChangesRepository saveChangesRepository, INewsLikeRepository newsLikeRepository, INewsCommentRepository newsCommentRepository)
         {
             _newsRepository = newsRepository;
             _saveChangesRepository = saveChangesRepository;
+            _newsLikeRepository = newsLikeRepository;
+            _newsCommentRepository = newsCommentRepository;
         }
-
         public async Task<OpRes> AddNewsAsync(NewsViewModel newsViewModel)
         {
             var error = ValidateNews(newsViewModel);
@@ -127,6 +130,76 @@ namespace MyCms.Core.Services
         public async Task<PagedResult<NewsDto, NewsSearchItem>> GetNewsByPaging(NewsSearchItem item)
         {
             return await _newsRepository.GetNewsByPaging(item);
+        }
+
+        public async Task<OpRes> AddCommentAsync(NewsCommentViewModel comment, int userId)
+        {
+            if (comment.Text.IsNullOrWhiteSpace())
+            {
+                return OpRes.BuildError("Text can't be null");
+            }
+
+            var newsComment = comment.ToNewsComment(userId);
+            await _newsCommentRepository.AddAsync(newsComment);
+            await _saveChangesRepository.SaveChangesAsync();
+            return OpRes.BuildSuccess();
+        }
+
+        public async Task<OpRes> DeleteCommentAsync(int commentId)
+        {
+            var comment = await _newsCommentRepository.GetCommentByCommentId(commentId);
+            if (comment == null)
+            {
+                return OpRes.BuildError("Comment not found");
+            }
+            await _newsCommentRepository.DeleteAsync(commentId);
+            await _saveChangesRepository.SaveChangesAsync();
+            return OpRes.BuildSuccess();
+        }
+
+        public async Task<PagedResult<NewsCommentDto, NewsCommentSearchItem>> GetCommentByNewsId(NewsCommentSearchItem item)
+        {
+            return await _newsCommentRepository.GetCommentByNewsId(item);
+        }
+
+        public async Task<OpRes> AddOrDeleteNewsLikeAsync(NewsLikeViewModel newsLike, int userId)
+        {
+            if (newsLike.NewsId == 0)
+            {
+                return OpRes.BuildError("News id can't be null");
+            }
+            var news = await _newsRepository.GetNewsByNewsIdAsync(newsLike.NewsId);
+            if (news == null)
+            {
+                return OpRes.BuildError("News not found");
+            }
+            var isLiked = await _newsLikeRepository.IsUserLikeNews(newsLike.NewsId, userId);
+            if (isLiked)
+            {
+                await _newsLikeRepository.DeleteAsync(newsLike.NewsId, userId);
+            }
+            else
+            {
+                var model = newsLike.ToNewsLike(userId);
+                await _newsLikeRepository.AddAsync(model);
+            }
+            await _saveChangesRepository.SaveChangesAsync();
+            return OpRes.BuildSuccess();
+        }
+
+        public async Task<int> NewsLikeCountByNewsId(int newsId)
+        {
+            return await _newsLikeRepository.CountByNewsId(newsId);
+        }
+
+        public async Task<List<NewsDto>> GetTopTenNewsByComment()
+        {
+            return await _newsRepository.GetTopTenNewsByComment();
+        }
+
+        public async Task<List<NewsDto>> GetTopFiveFavoriteNews()
+        {
+            return await _newsRepository.GetTopFiveFavoriteNews();
         }
     }
 }

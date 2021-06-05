@@ -12,13 +12,12 @@ namespace MyCms.Domain.Entities
 
         }
 
-        public NewsComment(int id, string text, int userId, int parentId)
+        public NewsComment(string text, int userId, int? parentId)
         {
-            Id = id;
             Text = text;
             UserId = userId;
             ParentId = parentId;
-        } 
+        }
         #endregion
 
         [Key]
@@ -31,9 +30,12 @@ namespace MyCms.Domain.Entities
         [Required]
         public int UserId { get; set; }
 
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public int NewsId { get; set; }
+
 
         #region Relations
 
@@ -42,6 +44,9 @@ namespace MyCms.Domain.Entities
 
         [ForeignKey(nameof(ParentId))]
         public NewsComment Comment { get; set; }
+
+        [ForeignKey(nameof(NewsId))]
+        public News News { get; set; }
 
         #endregion
     }

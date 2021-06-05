@@ -24,6 +24,10 @@ namespace MyCms.Domain.Interfaces
         /// <returns></returns>
         Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item);
 
+        Task<List<CategoryDetailDto>> GetCategoryWithFirstNews();
+
+        Task<List<CategoryDetailWithTopFiveNewsDto>> GetCategoryWithTopFiveNews();
+
         #endregion
 
         #region Add Or Update

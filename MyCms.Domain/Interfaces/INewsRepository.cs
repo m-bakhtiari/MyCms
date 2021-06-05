@@ -1,6 +1,7 @@
 ﻿using MyCms.Domain.Dto;
 using MyCms.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MyCms.Domain.Interfaces
@@ -22,6 +23,10 @@ namespace MyCms.Domain.Interfaces
         /// <param name="item"></param>
         /// <returns></returns>
         Task<PagedResult<NewsDto, NewsSearchItem>> GetNewsByPaging(NewsSearchItem item);
+
+        Task<List<NewsDto>> GetTopFiveFavoriteNews();
+
+        Task<List<NewsDto>> GetTopTenNewsByComment();
 
         #endregion
 

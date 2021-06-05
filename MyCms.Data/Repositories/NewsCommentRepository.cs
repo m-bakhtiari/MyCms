@@ -39,21 +39,33 @@ namespace MyCms.Data.Repositories
             await _context.DisposeAsync();
         }
 
-        public async Task<PagedResult<NewsCommentDto, BaseSearchItem>> GetCommentByNewsId(int commentId, BaseSearchItem item)
+        public async Task<NewsComment> GetCommentByCommentId(int commentId)
         {
-            var res = new PagedResult<NewsCommentDto, BaseSearchItem>() { Items = new List<NewsCommentDto>(), SearchItem = item };
-            var comment = _context.NewsComments.Include(x => x.Comment).Select(c => new NewsCommentDto()
-            {
-                Id = c.Id,
-                Text = c.Text,
-                ParentId = c.ParentId,
-                UserId = c.UserId,
-                Username = c.User.FullName
-            });
+            return await _context.NewsComments.FindAsync(commentId);
+        }
+
+        public async Task<PagedResult<NewsCommentDto, NewsCommentSearchItem>> GetCommentByNewsId(NewsCommentSearchItem item)
+        {
+            var res = new PagedResult<NewsCommentDto, NewsCommentSearchItem>() { Items = new List<NewsCommentDto>(), SearchItem = item };
+            var comment = _context.NewsComments
+                .Include(x => x.Comment).Include(x => x.News).Include(x => x.User)
+                .Select(c => new NewsCommentDto()
+                {
+                    Id = c.Id,
+                    Text = c.Text,
+                    ParentId = c.ParentId,
+                    UserId = c.UserId,
+                    Username = c.User.FullName,
+                    NewsId = c.NewsId,
+                });
             var count = await comment.CountAsync();
             res.CountAll = count;
             res.ItemPerPage = item.ItemPerPage.Value;
             comment = comment.Skip((item.PageId.Value - 1) * item.ItemPerPage.Value).Take(item.ItemPerPage.Value);
+            if (item.NewsId != null)
+            {
+                comment = comment.Where(x => x.NewsId == item.NewsId);
+            }
             res.Items = await comment.ToListAsync();
             res.CurrentPage = item.CurrentPage.Value;
             return res;

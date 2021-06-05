@@ -38,5 +38,10 @@ namespace MyCms.Data.Repositories
         {
             await _context.DisposeAsync();
         }
+
+        public async Task<bool> IsUserLikeNews(int newsId, int userId)
+        {
+            return await _context.NewsLikes.AnyAsync(x => x.NewsId == newsId && x.UserId == userId);
+        }
     }
 }

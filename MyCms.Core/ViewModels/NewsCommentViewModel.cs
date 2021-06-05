@@ -9,7 +9,6 @@ namespace MyCms.Core.ViewModels
     public class NewsCommentViewModel
     {
         public string Text { get; set; }
-        public int UserId { get; set; }
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
     }
 }

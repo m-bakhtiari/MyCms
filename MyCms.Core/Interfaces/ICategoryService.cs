@@ -18,7 +18,7 @@ namespace MyCms.Core.Interfaces
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<Category> GetCategoryByCategoryIdAsync(int categoryId);
+        Task<CategoryDto> GetCategoryByCategoryIdAsync(int categoryId);
 
         /// <summary>
         /// get category by paging and search in items 
@@ -26,6 +26,11 @@ namespace MyCms.Core.Interfaces
         /// <param name="item"></param>
         /// <returns></returns>
         Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item);
+
+        Task<List<CategoryDetailDto>> GetCategoryWIthFirstNews();
+
+        Task<List<CategoryDetailWithTopFiveNewsDto>> GetCategoryWithTopFiveNews();
+
 
         #endregion
 
