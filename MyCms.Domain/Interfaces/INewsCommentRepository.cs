@@ -11,5 +11,6 @@ namespace MyCms.Domain.Interfaces
         Task DeleteAsync(int commentId);
         Task<PagedResult<NewsCommentDto, NewsCommentSearchItem>> GetCommentByNewsId(NewsCommentSearchItem item);
         Task<NewsComment> GetCommentByCommentId(int commentId);
+        Task<int> CountByNewsId(int newsId);
     }
 }

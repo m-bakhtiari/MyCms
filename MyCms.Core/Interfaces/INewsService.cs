@@ -29,6 +29,8 @@ namespace MyCms.Core.Interfaces
 
         Task<PagedResult<NewsCommentDto, NewsCommentSearchItem>> GetCommentByNewsId(NewsCommentSearchItem item);
 
+        Task<int> CountCommentByNewsId(int newsId);
+
         #endregion
 
         #region News Likes

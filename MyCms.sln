@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{96A91FA3-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCms.Tests", "MyCms.Tests\MyCms.Tests.csproj", "{8705F5CE-2809-4B66-AD0F-F1DCD859ED00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCms.Extensions", "MyCms.Extensions\MyCms.Extensions.csproj", "{BFA3D9B1-19AF-448C-AC33-404F25863F20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCms.Extensions", "MyCms.Extensions\MyCms.Extensions.csproj", "{BFA3D9B1-19AF-448C-AC33-404F25863F20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

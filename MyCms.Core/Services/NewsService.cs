@@ -201,5 +201,10 @@ namespace MyCms.Core.Services
         {
             return await _newsRepository.GetTopFiveFavoriteNews();
         }
+
+        public async Task<int> CountCommentByNewsId(int newsId)
+        {
+            return await _newsCommentRepository.CountByNewsId(newsId);
+        }
     }
 }

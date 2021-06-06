@@ -25,16 +25,25 @@ namespace MyCms.Api.Controllers
         }
         #endregion
 
-        // GET: api/News/5
+        // GET: api/NewsLike/5
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetNewsLike(int id)
+        public async Task<IActionResult> GetNewsLikeCount(int id)
         {
             var newsCount = await _newsService.NewsLikeCountByNewsId(id);
             return Ok(newsCount);
         }
 
-        // POST: api/News
+        // GET: api/NewsLike/5
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTopNewsLike()
+        {
+            var news = await _newsService.GetTopFiveFavoriteNews();
+            return Ok(news);
+        }
+
+        // POST: api/NewsLike
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult> PostNewsLike(NewsLikeViewModel newsLike)

@@ -33,6 +33,25 @@ namespace MyCms.Api.Controllers
             return Ok(res);
         }
 
+        // GET: api/NewsComment
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetNewsCommentCount(int newsId)
+        {
+            var res = await _newsService.CountCommentByNewsId(newsId);
+            return Ok(res);
+        }
+
+
+        // GET: api/NewsComment
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTopNewsComment()
+        {
+            var res = await _newsService.GetTopTenNewsByComment();
+            return Ok(res);
+        }
+
         // POST: api/News
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -47,7 +66,7 @@ namespace MyCms.Api.Controllers
             return Ok();
         }
 
-        // DELETE: api/News/5
+        // DELETE: api/NewsComment/5
         [HttpDelete("{id}")]
         [PermissionChecker]
         public async Task<IActionResult> DeleteNews(int id)

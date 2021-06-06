@@ -23,6 +23,11 @@ namespace MyCms.Data.Repositories
             await _context.NewsComments.AddAsync(comment);
         }
 
+        public async Task<int> CountByNewsId(int newsId)
+        {
+            return await _context.NewsComments.CountAsync(x => x.NewsId == newsId);
+        }
+
         public async Task DeleteAsync(int commentId)
         {
             var comment = await _context.NewsComments.FindAsync(commentId);
