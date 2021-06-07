@@ -1,0 +1,9 @@
+﻿<li class="tabs__item @(IsActive?"tabs__item--active":"")">
+    <a href="#tab-all" class="tabs__trigger">همه</a>
+</li>
+
+@code
+{
+    [Parameter]
+    public bool IsActive { get; set; }
+}
