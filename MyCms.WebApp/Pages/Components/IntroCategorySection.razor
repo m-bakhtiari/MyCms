@@ -1,0 +1,26 @@
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+
+<section class="featured-posts-grid">
+    <div class="container">
+        <div class="row row-8">
+            @if (CategoryDetailDto.Any())
+            {
+                @foreach (var item in CategoryDetailDto)
+                {
+                    <IntroCategory Dto="@item"></IntroCategory>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+@code
+{
+    private List<CategoryDetailDto> CategoryDetailDto { get; set; } = new List<CategoryDetailDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        CategoryDetailDto = await _http.GetFromJsonAsync<List<CategoryDetailDto>>(Const.SiteUrl + "/api/CategoryNews");
+    }
+}

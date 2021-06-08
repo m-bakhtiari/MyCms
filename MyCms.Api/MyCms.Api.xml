@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyCms.Api</name>
+    </assembly>
+    <members>
+        <member name="M:MyCms.Api.Controllers.CategoryNewsController.GetCategoryWithFirstNews">
+            <summary>
+            گرفتن لیست گروه ها به همراه تازه ترین خبر آنها
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyCms.Api.Controllers.TopNewsLikeController.GetTopNewsLike">
+            <summary>
+            گرفتن پنج خبر محبوب بر اساس لایک کاربران
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

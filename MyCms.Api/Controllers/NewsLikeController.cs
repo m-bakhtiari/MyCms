@@ -34,15 +34,6 @@ namespace MyCms.Api.Controllers
             return Ok(newsCount);
         }
 
-        // GET: api/NewsLike/5
-        [HttpGet("{id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetTopNewsLike()
-        {
-            var news = await _newsService.GetTopFiveFavoriteNews();
-            return Ok(news);
-        }
-
         // POST: api/NewsLike
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

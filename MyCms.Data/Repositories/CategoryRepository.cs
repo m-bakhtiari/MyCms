@@ -84,7 +84,7 @@ namespace MyCms.Data.Repositories
 
         public async Task<List<CategoryDetailDto>> GetCategoryWithFirstNews()
         {
-            return await _context.Categories.Include(x => x.News.OrderByDescending(n => n.CreateAt).FirstOrDefault())
+            return await _context.Categories.Include(x => x.News.OrderByDescending(n=>n.CreateAt))
                 .Where(x => x.News.Any()).Select(c => new CategoryDetailDto()
                 {
                     NewsId = c.News.FirstOrDefault().Id,

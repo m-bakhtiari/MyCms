@@ -34,21 +34,11 @@ namespace MyCms.Api.Controllers
         }
 
         // GET: api/NewsComment
-        [HttpGet]
+        [HttpGet("{newsId}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetNewsCommentCount(int newsId)
         {
             var res = await _newsService.CountCommentByNewsId(newsId);
-            return Ok(res);
-        }
-
-
-        // GET: api/NewsComment
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetTopNewsComment()
-        {
-            var res = await _newsService.GetTopTenNewsByComment();
             return Ok(res);
         }
 

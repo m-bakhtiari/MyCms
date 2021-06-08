@@ -1,9 +1,29 @@
-﻿<aside class="col-lg-4 sidebar sidebar--right">
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Extensions
+@using MyCms.WebApp.Models
+
+<aside class="col-lg-4 sidebar sidebar--right">
     <aside class="widget widget-popular-posts">
         <h4 class="widget-title">محبوب ترین مقالات</h4>
         <ul class="post-list-small">
-            <FavoriteNews></FavoriteNews>
+            @if (NewsDto.Any())
+            {
+                @foreach (var item in NewsDto)
+                {
+                    <FavoriteNews NewsDto="@item"></FavoriteNews>
+                }
+            }
         </ul>
     </aside>
     <Register></Register>
 </aside>
+
+@code
+{
+    private List<NewsDto> NewsDto { get; set; } = new List<NewsDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        NewsDto = await _http.GetFromJsonAsync<List<NewsDto>>(Const.SiteUrl + "/api/TopNewsLike");
+    }
+}

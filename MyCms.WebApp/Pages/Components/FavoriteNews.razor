@@ -1,28 +1,34 @@
-﻿<li class="post-list-small__item">
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Extensions
+@using MyCms.WebApp.Models
+
+<li class="post-list-small__item">
     <article class="post-list-small__entry clearfix">
         <div class="post-list-small__img-holder">
             <div class="thumb-container thumb-100">
-                <a href="single-post.html">
-                    <img data-src="img/content/thumb/post-8.jpg" src="img/empty.png" alt="" class="post-list-small__img--rounded lazyload">
+                <a href="/NewsDetails/@NewsDto.Id">
+                    <img data-src="@(NewsDto.ImageName!=null?Const.SiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
+                         src="@(NewsDto.ImageName!=null?Const.SiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
+                         alt="favorite news" class="post-list-small__img--rounded lazyload" />
                 </a>
             </div>
         </div>
         <div class="post-list-small__body">
             <h3 class="post-list-small__entry-title">
-                <a href="single-post.html">گوشی تاشو هواوی میت ایکس در تاریخ مقرر عرضه می‌شود</a>
+                <a href="/NewsDetails/@NewsDto.Id">@NewsDto.Title</a>
             </h3>
             <ul class="entry__meta">
-                <li class="entry__meta-author">
-                    <span>نویسنده:</span>
-                    <a href="#">بهرامی راد</a>
-                </li>
                 <li class="entry__meta-date">
-                    ۴ اردیبهشت ۱۳۹۸
+                    @NewsDto.CreateAt.ToShamsiWithMonthName()
                 </li>
             </ul>
         </div>
     </article>
 </li>
+
 @code {
+
+    [Parameter]
+    public NewsDto NewsDto { get; set; }
 
 }
