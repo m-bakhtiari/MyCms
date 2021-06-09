@@ -14,14 +14,30 @@
                         <p class="copyright">
                             استفاده از مطالب تاپ‌کالا مگ برای مقاصد غیرتجاری با ذکر نام تاپ‌کالا مگ و لینک به منبع بلامانع است. حقوق این سایت به شرکت توس وردپرس(فروشگاه آنلاین تاپ‌کالا) تعلق دارد.
                         </p>
-                        <SocialMedia></SocialMedia>
+                        <div class="socials socials--large socials--rounded mb-24">
+                            <a href="#" class="social social-facebook" aria-label="facebook"><i class="ui-facebook"></i></a>
+                            <a href="#" class="social social-twitter" aria-label="twitter"><i class="ui-twitter"></i></a>
+                            <a href="#" class="social social-google-plus" aria-label="google+"><i class="ui-google"></i></a>
+                            <a href="#" class="social social-youtube" aria-label="youtube"><i class="ui-youtube"></i></a>
+                            <a href="#" class="social social-instagram" aria-label="instagram"><i class="ui-instagram"></i></a>
+                        </div>
                     </aside>
                 </div>
                 <div class="col-lg-2 col-md-6">
                     <aside class="widget widget_nav_menu">
                         <h4 class="widget-title">دسته بندی اخبار</h4>
                         <ul>
-                            <CategoryTitle></CategoryTitle>
+                            @foreach (var item in CategoryDto.Items)
+                            {
+                                <li>
+                                    <a href="/NewsDetails/@item.Id">
+                                        @item.Title
+                                        <span class="categories-count">
+                                            @item.CategoryNewsCount
+                                        </span>
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </aside>
                 </div>
@@ -51,9 +67,13 @@
 @code
 {
     private List<NewsDto> NewsDto { get; set; } = new List<NewsDto>();
+    private PagedResult<CategoryDto, CategorySearchItem> CategoryDto { get; set; } = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>() };
 
     protected override async Task OnInitializedAsync()
     {
-        NewsDto = await _http.GetFromJsonAsync<List<NewsDto>>(Const.SiteUrl + "/api/TopNewsLike");
+        NewsDto = await _http.GetFromJsonAsync<List<NewsDto>>(Const.ApiSiteUrl + "/api/TopNewsLike");
+        CategoryDto = await _http.GetFromJsonAsync<PagedResult<CategoryDto, CategorySearchItem>>(Const.ApiSiteUrl + "/api/Category");
+
     }
+
 }

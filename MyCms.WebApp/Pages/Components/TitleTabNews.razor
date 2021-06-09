@@ -1,9 +1,15 @@
-﻿<li class="tabs__item @(IsActive?"tabs__item--active":"")">
-    <a href="#tab-all" class="tabs__trigger">همه</a>
+﻿@using MyCms.Domain.Dto
+
+
+<li class="tabs__item @(IsActive?"tabs__item--active":"")">
+    <a href="#tab-all" class="tabs__trigger">@CategoryDto.Title</a>
 </li>
 
 @code
 {
     [Parameter]
     public bool IsActive { get; set; }
+
+    [Parameter]
+    public CategoryDto CategoryDto { get; set; }
 }

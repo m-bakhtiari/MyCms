@@ -3589,11 +3589,12 @@ img.mfp-img {
 
 .categories-count {
     float: left;
-    background-color: #f7f7f7;
+    background-color: #0e79c9;
     display: inline-block;
     padding: 0 11px;
     height: 24px;
-    border-radius: 5px;
+    border-radius: 50px;
+    color: #fff0f5;
 }
 
 /* Widget Newsletter 

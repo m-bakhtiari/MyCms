@@ -1,0 +1,43 @@
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+
+
+<li class="nav__dropdown">
+    <a href="/NewsList/@CategoryId">@CategoryTitle</a>
+    <ul class="nav__dropdown-menu nav__megamenu">
+        <li>
+            <div class="nav__megamenu-wrap">
+                <div class="row">
+                    @foreach (var item in NewsDto.Items)
+                    {
+                        <MegaMenuItem NewsDto="@item"></MegaMenuItem>
+                    }
+                </div>
+            </div>
+        </li>
+    </ul>
+</li>
+
+@code
+{
+    [Parameter]
+    public int CategoryId { get; set; }
+
+    [Parameter]
+    public string CategoryTitle { get; set; }
+
+    private PagedResult<NewsDto, NewsSearchItem> NewsDto { get; set; } = new PagedResult<NewsDto, NewsSearchItem>() { Items = new List<NewsDto>() };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var searchItem = new NewsSearchItem()
+        {
+            HasPaging = true,
+            ItemPerPage = 4,
+            CategoryId = CategoryId,
+            PageId = 1,
+        };
+        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/News", searchItem);
+        NewsDto = await response.Content.ReadFromJsonAsync<PagedResult<NewsDto, NewsSearchItem>>();
+    }
+}

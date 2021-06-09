@@ -1,4 +1,6 @@
-﻿<div class="top-bar d-none d-lg-block">
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+<div class="top-bar d-none d-lg-block">
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
@@ -46,18 +48,10 @@
                         <li class="active">
                             <a href="index.html">صفحه اصلی</a>
                         </li>
-                        <li class="nav__dropdown">
-                            <a href="#">تکنولوژی</a>
-                            <ul class="nav__dropdown-menu nav__megamenu">
-                                <li>
-                                    <div class="nav__megamenu-wrap">
-                                        <div class="row">
-                                            <MegaMenuItem></MegaMenuItem>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
+                        @foreach (var item in CategoryDto.Items)
+                        {
+                            <CategoryMenu CategoryId="@item.Id" CategoryTitle="@item.Title"></CategoryMenu>
+                        }
                     </ul>
                 </nav>
                 <div class="nav__right">
@@ -78,4 +72,14 @@
             </div>
         </div>
     </div>
-</header> 
+</header>
+
+@code
+{
+    public PagedResult<CategoryDto, CategorySearchItem> CategoryDto { get; set; } = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>() };
+
+    protected override async Task OnInitializedAsync()
+    {
+        CategoryDto = await _http.GetFromJsonAsync<PagedResult<CategoryDto, CategorySearchItem>>(Const.ApiSiteUrl + "/api/Category");
+    }
+}

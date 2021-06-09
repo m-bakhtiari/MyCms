@@ -11,7 +11,6 @@ namespace MyCms.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [PermissionChecker]
     public class CategoryController : ControllerBase
     {
         #region Constructor
@@ -24,12 +23,32 @@ namespace MyCms.Api.Controllers
         }
         #endregion
 
-        // GET: api/Category
+        ///// <summary>
+        ///// گرفتن عنوان دسته بندی اخبار با قابلیت سرچ روی آنان و صفحه بندی
+        ///// </summary>
+        ///// <param name="item"></param>
+        ///// <returns></returns>
+        //[HttpGet]
+        //[AllowAnonymous]
+        //[ProducesResponseType(200, Type = typeof(PagedResult<CategoryDto, CategorySearchItem>))]
+        //public async Task<IActionResult> GetCategory(CategorySearchItem item)
+        //{
+        //    var res = await _categoryService.GetCategoryByPaging(item);
+        //    return Ok(res);
+        //}
+
+        /// <summary>
+        /// گرفتن تمام عنوان دسته بندی اخبار 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetCategory(CategorySearchItem item)
+        [ProducesResponseType(200, Type = typeof(PagedResult<CategoryDto, CategorySearchItem>))]
+        public async Task<IActionResult> GetCategory()
         {
-            var res = await _categoryService.GetCategoryByPaging(item);
+            var searchItem = new CategorySearchItem() { HasPaging = false };
+            var res = await _categoryService.GetCategoryByPaging(searchItem);
             return Ok(res);
         }
 
@@ -51,6 +70,7 @@ namespace MyCms.Api.Controllers
         // PUT: api/Category/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [PermissionChecker]
         public async Task<IActionResult> PutCategory(int id, CategoryViewModel categoryViewModel)
         {
             if (id != categoryViewModel.Id)
@@ -69,6 +89,7 @@ namespace MyCms.Api.Controllers
         // POST: api/Category
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [PermissionChecker]
         public async Task<ActionResult> PostCategory(CategoryViewModel CategoryViewModel)
         {
             var res = await _categoryService.AddAsync(CategoryViewModel);
@@ -81,6 +102,7 @@ namespace MyCms.Api.Controllers
 
         // DELETE: api/Category/5
         [HttpDelete("{id}")]
+        [PermissionChecker]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var role = await _categoryService.DeleteCategoryAsync(id);

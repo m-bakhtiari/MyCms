@@ -21,6 +21,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        CategoryDetailDto = await _http.GetFromJsonAsync<List<CategoryDetailDto>>(Const.SiteUrl + "/api/CategoryNews");
+        CategoryDetailDto = await _http.GetFromJsonAsync<List<CategoryDetailDto>>(Const.ApiSiteUrl + "/api/CategoryNews");
     }
 }

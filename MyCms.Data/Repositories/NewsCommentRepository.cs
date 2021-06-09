@@ -72,7 +72,6 @@ namespace MyCms.Data.Repositories
                 comment = comment.Where(x => x.NewsId == item.NewsId);
             }
             res.Items = await comment.ToListAsync();
-            res.CurrentPage = item.CurrentPage.Value;
             return res;
         }
     }

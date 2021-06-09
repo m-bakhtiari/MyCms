@@ -1,0 +1,48 @@
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+
+
+<div class="col-lg-8 blog__content">
+    <section class="section tab-post mb-16">
+        <div class="title-wrap title-wrap--line">
+            <h3 class="section-title">آخرین عنوان ها</h3>
+            <div class="tabs tab-post__tabs">
+                <ul class="tabs__list">
+                    @if (CategoryDto != null)
+                    {
+                        if (CategoryDto.Items.Any())
+                        {
+                            @foreach (var item in CategoryDto.Items)
+                            {
+                                <TitleTabNews IsActive="true" CategoryDto="@item"></TitleTabNews>
+                            }
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="tabs__content tabs__content-trigger tab-post__tabs-content">
+            @if (CategoryDto != null)
+            {
+                if (CategoryDto.Items.Any())
+                {
+
+                    @foreach (var item in CategoryDto.Items)
+                    {
+                        <TabNews TabId="@item.Title" CategoryId="@item.Id"></TabNews>
+                    }
+                }
+            }
+        </div>
+    </section>
+</div>
+
+@code
+{
+    private PagedResult<CategoryDto, CategorySearchItem> CategoryDto { get; set; } = new PagedResult<CategoryDto, CategorySearchItem>(){Items = new List<CategoryDto>()};
+
+    protected override async Task OnInitializedAsync()
+    {
+        CategoryDto = await _http.GetFromJsonAsync<PagedResult<CategoryDto, CategorySearchItem>>(Const.ApiSiteUrl + "/api/Category");
+    }
+}

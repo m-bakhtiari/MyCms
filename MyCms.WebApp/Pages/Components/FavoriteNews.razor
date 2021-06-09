@@ -7,8 +7,8 @@
         <div class="post-list-small__img-holder">
             <div class="thumb-container thumb-100">
                 <a href="/NewsDetails/@NewsDto.Id">
-                    <img data-src="@(NewsDto.ImageName!=null?Const.SiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
-                         src="@(NewsDto.ImageName!=null?Const.SiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
+                    <img data-src="@(NewsDto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
+                         src="@(NewsDto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
                          alt="favorite news" class="post-list-small__img--rounded lazyload" />
                 </a>
             </div>

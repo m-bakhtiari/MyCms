@@ -87,7 +87,6 @@ namespace MyCms.Data.Repositories
                 }
                 news = news.Skip((item.PageId.Value - 1) * item.ItemPerPage.Value).Take(item.ItemPerPage.Value);
                 res.Items = await news.ToListAsync();
-                res.CurrentPage = item.CurrentPage.Value;
             }
 
             return res;

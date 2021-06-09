@@ -1,16 +1,31 @@
-﻿<div class="col nav__megamenu-item">
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+
+
+<div class="col nav__megamenu-item">
     <article class="entry">
         <div class="entry__img-holder">
-            <a href="single-post.html">
-                <img src="img/content/thumb/post-1.jpg" alt="" class="entry__img">
+            <a href="/NewsDetails/@NewsDto.Id">
+                <img src="@(NewsDto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
+                     alt="image news" class="entry__img" />
             </a>
-            <a href="categories.html" class="entry__meta-category entry__meta-category--label entry__meta-category--align-in-corner entry__meta-category--violet">تکنولوژی</a>
+            <a href="/NewsList/@NewsDto.Id"
+               class="entry__meta-category entry__meta-category--label entry__meta-category--align-in-corner entry__meta-category--violet">
+                @NewsDto.CategoryTitle
+            </a>
         </div>
-
         <div class="entry__body">
             <h2 class="entry__title">
-                <a href="single-post.html">چرا لانچرهای اندروید دیگر محبوبیت گذشته را ندارند؟</a>
+                <a href="/NewsDetails/@NewsDto.Id">
+                    @NewsDto.Title
+                </a>
             </h2>
         </div>
     </article>
 </div>
+
+@code
+{
+    [Parameter]
+    public NewsDto NewsDto { get; set; }
+}

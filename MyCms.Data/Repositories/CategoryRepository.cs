@@ -45,7 +45,6 @@ namespace MyCms.Data.Repositories
                 }
                 categories = categories.Skip((item.PageId.Value - 1) * item.ItemPerPage.Value).Take(item.ItemPerPage.Value);
                 res.Items = await categories.ToListAsync();
-                res.CurrentPage = item.CurrentPage.Value;
             }
 
             return res;

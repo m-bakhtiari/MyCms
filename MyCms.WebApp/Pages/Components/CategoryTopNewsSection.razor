@@ -1,0 +1,22 @@
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+
+
+<section class="section mb-0">
+    <div class="row">
+        @foreach (var item in CategoryDto.Items)
+        {
+            <CategoryTopFiveNews CategoryId="@item.Id" CategoryTitle="@item.Title"></CategoryTopFiveNews>
+        }
+    </div>
+</section>
+
+@code
+{
+    private PagedResult<CategoryDto, CategorySearchItem> CategoryDto { get; set; } = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>() };
+
+    protected override async Task OnInitializedAsync()
+    {
+        CategoryDto = await _http.GetFromJsonAsync<PagedResult<CategoryDto, CategorySearchItem>>(Const.ApiSiteUrl + "/api/Category");
+    }
+}

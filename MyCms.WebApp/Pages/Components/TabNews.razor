@@ -1,12 +1,36 @@
-﻿<div class="tabs__content-pane tabs__content-pane--active" id="@TabId">
-    <div class="row card-row">
-        <TabNewsArticle></TabNewsArticle>
-    </div>
-</div> 
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
 
+
+<div class="tabs__content-pane tabs__content-pane--active" id="@TabId">
+    <div class="row card-row">
+        @foreach (var item in NewsModel.Items)
+        {
+            <TabNewsArticle NewsDto="@item"></TabNewsArticle>
+        }
+    </div>
+</div>
 
 @code
 {
     [Parameter]
     public string TabId { get; set; }
+
+    [Parameter]
+    public int? CategoryId { get; set; }
+
+    private PagedResult<NewsDto, NewsSearchItem> NewsModel { get; set; } = new PagedResult<NewsDto, NewsSearchItem>() { Items = new List<NewsDto>() };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var searchItem = new NewsSearchItem()
+        {
+            CategoryId = CategoryId,
+            HasPaging = true,
+            ItemPerPage = 4,
+            PageId = 1,
+        };
+        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/News", searchItem);
+        NewsModel = await response.Content.ReadFromJsonAsync<PagedResult<NewsDto, NewsSearchItem>>();
+    }
 }

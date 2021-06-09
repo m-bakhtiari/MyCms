@@ -11,7 +11,6 @@ namespace MyCms.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [PermissionChecker]
     public class NewsController : ControllerBase
     {
         #region Constructor
@@ -24,10 +23,15 @@ namespace MyCms.Api.Controllers
         }
         #endregion
 
-        // GET: api/News
-        [HttpGet]
+        /// <summary>
+        /// گرفتن اخبار با نام دسته بندی آنان با امکان صفحه بندی و سرچ روی اخبار
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> GetNews(NewsSearchItem item)
+        [ProducesResponseType(200, Type = typeof(PagedResult<NewsDto, NewsSearchItem>))]
+        public async Task<IActionResult> GetNewsByFilter(NewsSearchItem item)
         {
             var res = await _newsService.GetNewsByPaging(item);
             return Ok(res);
@@ -51,6 +55,7 @@ namespace MyCms.Api.Controllers
         // PUT: api/News/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [PermissionChecker]
         public async Task<IActionResult> PutNews(int id, NewsViewModel newsViewModel)
         {
             if (id != newsViewModel.Id)
@@ -66,21 +71,22 @@ namespace MyCms.Api.Controllers
             return Ok();
         }
 
-        // POST: api/News
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult> PostNews(NewsViewModel newsViewModel)
-        {
-            var res = await _newsService.AddNewsAsync(newsViewModel);
-            if (res.IsSuccess == false)
-            {
-                return res.ToBadRequestError();
-            }
-            return Ok();
-        }
+        //// POST: api/News
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult> PostNews(NewsViewModel newsViewModel)
+        //{
+        //    var res = await _newsService.AddNewsAsync(newsViewModel);
+        //    if (res.IsSuccess == false)
+        //    {
+        //        return res.ToBadRequestError();
+        //    }
+        //    return Ok();
+        //}
 
         // DELETE: api/News/5
         [HttpDelete("{id}")]
+        [PermissionChecker]
         public async Task<IActionResult> DeleteNews(int id)
         {
             var role = await _newsService.DeleteNewsAsync(id);

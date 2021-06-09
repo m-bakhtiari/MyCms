@@ -3,21 +3,7 @@
 <div class="main-container container pt-24" id="main-container">
     <IntroCategorySection></IntroCategorySection>
     <div class="row">
-        <div class="col-lg-8 blog__content">
-            <section class="section tab-post mb-16">
-                <div class="title-wrap title-wrap--line">
-                    <h3 class="section-title">آخرین عنوان ها</h3>
-                    <div class="tabs tab-post__tabs">
-                        <ul class="tabs__list">
-                            <TitleTabNews IsActive="true"></TitleTabNews>
-                        </ul>
-                    </div>
-                </div>
-                <div class="tabs__content tabs__content-trigger tab-post__tabs-content">
-                    <TabNews TabId="test"></TabNews>
-                </div>
-            </section>
-        </div>
+        <LatestTabNews></LatestTabNews>
         <FavoriteNewsBar></FavoriteNewsBar>
     </div>
     <section class="section mb-0">
@@ -28,11 +14,7 @@
             <SliderArticle></SliderArticle>
         </div>
     </section>
-    <section class="section mb-0">
-        <div class="row">
-            <CategoryTopFiveNews></CategoryTopFiveNews>
-        </div>
-    </section>
+   <CategoryTopNewsSection></CategoryTopNewsSection>
     <div class="row">
         <div class="col-lg-8 blog__content mb-72">
             <section class="section">
@@ -43,13 +25,6 @@
                 <Article></Article>
             </section>
         </div>
-        <aside class="col-lg-4 sidebar sidebar--1 sidebar--right">
-            <aside class="widget widget_categories">
-                <h4 class="widget-title">دسته بندی نوشته ها</h4>
-                <ul>
-                    <CategoryTitle></CategoryTitle>
-                </ul>
-            </aside>
-        </aside>
+        <CategoryTitleSection></CategoryTitleSection>
     </div>
 </div> 

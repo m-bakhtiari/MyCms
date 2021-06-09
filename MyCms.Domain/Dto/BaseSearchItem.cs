@@ -8,7 +8,6 @@ namespace MyCms.Domain.Dto
 {
     public abstract class BaseSearchItem
     {
-        public int? CurrentPage { get; set; } = 1;
         public int? ItemPerPage { get; set; } = 10;
         public int? PageId { get; set; } = 1;
         public bool HasPaging { get; set; }
