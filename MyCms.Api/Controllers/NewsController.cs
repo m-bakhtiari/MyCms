@@ -37,7 +37,11 @@ namespace MyCms.Api.Controllers
             return Ok(res);
         }
 
-        // GET: api/News/5
+        /// <summary>
+        /// گرفتن اطلاعات یک خبر
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetNews(int id)

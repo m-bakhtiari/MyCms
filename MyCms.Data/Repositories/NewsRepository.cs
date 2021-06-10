@@ -45,7 +45,10 @@ namespace MyCms.Data.Repositories
                 Description = x.Description,
                 ImageName = x.ImageName,
                 ShortDescription = x.ShortDescription,
-                Tags = x.Tags
+                Tags = x.Tags,
+                CategoryTitle = x.Category.Name,
+                CategoryId = x.CategoryId,
+                NewsCommentCount = x.NewsComments.Count
             }).FirstOrDefaultAsync(x => x.Id == newsId);
         }
 

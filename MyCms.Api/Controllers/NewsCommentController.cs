@@ -24,8 +24,12 @@ namespace MyCms.Api.Controllers
         }
         #endregion
 
-        // GET: api/NewsComment
-        [HttpGet]
+        /// <summary>
+        /// گرفتن کامنت ها با امکان سرچ و صفحه بندی
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> GetNewsComment(NewsCommentSearchItem item)
         {
@@ -44,17 +48,17 @@ namespace MyCms.Api.Controllers
 
         // POST: api/News
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        [Authorize]
-        public async Task<ActionResult> PostNews(NewsCommentViewModel comment)
-        {
-            var res = await _newsService.AddCommentAsync(comment, User.GetUserId());
-            if (res.IsSuccess == false)
-            {
-                return res.ToBadRequestError();
-            }
-            return Ok();
-        }
+        //[HttpPost]
+        //[Authorize]
+        //public async Task<ActionResult> PostNews(NewsCommentViewModel comment)
+        //{
+        //    var res = await _newsService.AddCommentAsync(comment, User.GetUserId());
+        //    if (res.IsSuccess == false)
+        //    {
+        //        return res.ToBadRequestError();
+        //    }
+        //    return Ok();
+        //}
 
         // DELETE: api/NewsComment/5
         [HttpDelete("{id}")]

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyCms.Domain.Entities
@@ -7,16 +8,9 @@ namespace MyCms.Domain.Entities
     {
         #region Constructor
 
-        protected NewsComment()
+        public NewsComment()
         {
 
-        }
-
-        public NewsComment(string text, int userId, int? parentId)
-        {
-            Text = text;
-            UserId = userId;
-            ParentId = parentId;
         }
         #endregion
 
@@ -35,6 +29,8 @@ namespace MyCms.Domain.Entities
         public bool IsDeleted { get; set; }
 
         public int NewsId { get; set; }
+
+        public DateTime CreateAt { get; set; }
 
 
         #region Relations

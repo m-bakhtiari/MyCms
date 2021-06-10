@@ -42,7 +42,15 @@ namespace MyCms.Core.Mapper
 
         public static NewsComment ToNewsComment(this NewsCommentViewModel comment, int userId)
         {
-            return new NewsComment(comment.Text, userId, comment.ParentId);
+            return new NewsComment()
+            {
+                CreateAt = DateTime.Now,
+                IsDeleted = false,
+                NewsId = comment.NewsId,
+                ParentId = comment.ParentId,
+                UserId = userId,
+                Text = comment.Text,
+            };
         }
     }
 }

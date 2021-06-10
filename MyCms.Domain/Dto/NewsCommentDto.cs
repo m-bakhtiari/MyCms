@@ -19,5 +19,6 @@ namespace MyCms.Domain.Dto
 
         public string Username { get; set; }
         public int NewsId { get; set; }
+        public DateTime CreateAt { get; set; }
     }
 }

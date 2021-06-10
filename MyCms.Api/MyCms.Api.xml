@@ -17,11 +17,25 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:MyCms.Api.Controllers.NewsCommentController.GetNewsComment(MyCms.Domain.Dto.NewsCommentSearchItem)">
+            <summary>
+            گرفتن کامنت ها با امکان سرچ و صفحه بندی
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
         <member name="M:MyCms.Api.Controllers.NewsController.GetNewsByFilter(MyCms.Domain.Dto.NewsSearchItem)">
             <summary>
             گرفتن اخبار با نام دسته بندی آنان با امکان صفحه بندی و سرچ روی اخبار
             </summary>
             <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MyCms.Api.Controllers.NewsController.GetNews(System.Int32)">
+            <summary>
+            گرفتن اطلاعات یک خبر
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="M:MyCms.Api.Controllers.TopNewsLikeController.GetTopNewsLike">

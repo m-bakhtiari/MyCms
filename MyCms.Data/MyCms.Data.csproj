@@ -18,8 +18,4 @@
     <ProjectReference Include="..\MyCms.Extensions\MyCms.Extensions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

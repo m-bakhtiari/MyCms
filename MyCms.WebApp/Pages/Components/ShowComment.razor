@@ -1,59 +1,29 @@
-﻿ <!-- Comments -->
-<div class="entry-comments">
-    <div class="title-wrap title-wrap--line">
-        <h3 class="section-title">۳ دیدگاه</h3>
-    </div>
-    <ul class="comment-list">
-        <li class="comment">
-            <div class="comment-body">
-                <div class="comment-avatar">
-                    <img alt="" src="img/default-avatar.png">
-                </div>
-                <div class="comment-text">
-                    <h6 class="comment-author">بهرامی راد</h6>
-                    <div class="comment-metadata">
-                        <a href="#" class="comment-date">۴ اردیبهشت ۱۳۹۸</a>
-                    </div>
-                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.</p>
-                    <a href="#" class="comment-reply">پاسخ</a>
-                </div>
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Extensions
+
+<ul class="comment-list">
+    <li class="comment">
+        <div class="comment-body">
+            <div class="comment-avatar">
+                <img alt="user image" src="img/default-avatar.png">
             </div>
-
-            <ul class="children">
-                <li class="comment">
-                    <div class="comment-body">
-                        <div class="comment-avatar">
-                            <img alt="" src="img/default-avatar.png">
-                        </div>
-                        <div class="comment-text">
-                            <h6 class="comment-author">حامد</h6>
-                            <div class="comment-metadata">
-                                <a href="#" class="comment-date">۴ اردیبهشت ۱۳۹۸</a>
-                            </div>
-                            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.</p>
-                            <a href="#" class="comment-reply">پاسخ</a>
-                        </div>
-                    </div>
-                </li> <!-- end reply comment -->
-            </ul>
-
-        </li> <!-- end 1-2 comment -->
-
-        <li>
-            <div class="comment-body">
-                <div class="comment-avatar">
-                    <img alt="" src="img/default-avatar.png">
+            <div class="comment-text">
+                <h6 class="comment-author">@NewsCommentDto.Username</h6>
+                <div class="comment-metadata">
+                    <a href="#" class="comment-date">@NewsCommentDto.CreateAt.ToShamsiWithMonthName()</a>
                 </div>
-                <div class="comment-text">
-                    <h6 class="comment-author">علی</h6>
-                    <div class="comment-metadata">
-                        <a href="#" class="comment-date">۴ اردیبهشت ۱۳۹۸</a>
-                    </div>
-                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.</p>
-                    <a href="#" class="comment-reply">پاسخ</a>
-                </div>
+                <p>@NewsCommentDto.Text</p>
+                <a href="#" class="comment-reply">پاسخ</a>
             </div>
-        </li> <!-- end 3 comment -->
+        </div>
+    </li>
+</ul>
 
-    </ul>
-</div> <!-- end comments -->
+@code
+{
+    [Parameter]
+    public NewsCommentDto NewsCommentDto { get; set; }
+
+    [Parameter]
+    public NewsCommentDto ResponseComment { get; set; }
+}

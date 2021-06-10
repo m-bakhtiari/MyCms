@@ -48,5 +48,10 @@ namespace MyCms.Domain.Dto
         /// آیدی دسته بندی
         /// </summary>
         public int CategoryId { get; set; }
+
+        /// <summary>
+        /// تعداد کامنت ها
+        /// </summary>
+        public int NewsCommentCount { get; set; }
     }
 }

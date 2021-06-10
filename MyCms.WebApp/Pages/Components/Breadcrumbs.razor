@@ -1,13 +1,23 @@
-﻿<div class="container">
+﻿@using MyCms.Domain.Dto
+<div class="container">
     <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-            <a href="index.html" class="breadcrumbs__url">خانه</a>
+            <a href="/" class="breadcrumbs__url">خانه</a>
         </li>
         <li class="breadcrumbs__item">
-            <a href="index.html" class="breadcrumbs__url">اخبار</a>
+            <a href="/NewsList/@CategoryId" class="breadcrumbs__url">اخبار</a>
         </li>
         <li class="breadcrumbs__item breadcrumbs__item--current">
-            تکنولوژی
+            @CategoryTitle
         </li>
     </ul>
 </div>
+
+@code
+{
+    [Parameter]
+    public int CategoryId { get; set; }
+
+    [Parameter]
+    public string CategoryTitle { get; set; }
+}

@@ -1,25 +1,53 @@
 ﻿@page "/NewsDetails/{Id}"
-<Breadcrumbs></Breadcrumbs>
+@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+
+<Breadcrumbs CategoryTitle="@NewsDto.CategoryTitle" CategoryId="@NewsDto.CategoryId"></Breadcrumbs>
 <div class="main-container container" id="main-container">
     <div class="row">
         <div class="col-lg-8 blog__content mb-72">
             <div class="content-box">
-                <ArticleDetails></ArticleDetails>
-                <ShowComment></ShowComment>
+                <ArticleDetails NewsDto="@NewsDto"></ArticleDetails>
+                <div class="entry-comments">
+                    <div class="title-wrap title-wrap--line">
+                        <h3 class="section-title">@Comment.Items.Count دیدگاه</h3>
+                    </div>
+                    @foreach (var item in Comment.Items)
+                    {
+                        <ShowComment ResponseComment="@Comment.Items.FirstOrDefault(c=>c.ParentId==item.Id)" NewsCommentDto="@item"></ShowComment>
+                    }
+                </div>
+                <Pagination></Pagination>
                 <AddComment></AddComment>
-            </div> 
-        </div> 
+            </div>
+        </div>
         <FavoriteNewsBar></FavoriteNewsBar>
-    </div> 
+    </div>
 </div>
 
 @code
 {
     [Parameter]
-    public int Id { get; set; }
+    public string Id { get; set; }
 
-    protected override void OnInitialized()
+    public NewsDto NewsDto { get; set; } = new NewsDto();
+
+    public PagedResult<NewsCommentDto, NewsCommentSearchItem> Comment { get; set; } = new PagedResult<NewsCommentDto, NewsCommentSearchItem>() { Items = new List<NewsCommentDto>() };
+
+    protected override async Task OnInitializedAsync()
     {
         Id = Id;
+        NewsDto = await _http.GetFromJsonAsync<NewsDto>(Const.ApiSiteUrl + $"/api/News/{Id}");
+
+        var commentSearch = new NewsCommentSearchItem()
+        {
+            HasPaging = true,
+            ItemPerPage = 5,
+            NewsId = int.Parse(Id),
+            PageId = 1
+        };
+        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/NewsComment", commentSearch);
+        Comment = await response.Content.ReadFromJsonAsync<PagedResult<NewsCommentDto, NewsCommentSearchItem>>();
     }
+
 }

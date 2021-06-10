@@ -10,5 +10,6 @@ namespace MyCms.Core.ViewModels
     {
         public string Text { get; set; }
         public int? ParentId { get; set; }
+        public int NewsId { get; set; }
     }
 }

@@ -62,6 +62,7 @@ namespace MyCms.Data.Repositories
                     UserId = c.UserId,
                     Username = c.User.FullName,
                     NewsId = c.NewsId,
+                    CreateAt = c.CreateAt
                 });
             var count = await comment.CountAsync();
             res.CountAll = count;
