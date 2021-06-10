@@ -1,31 +1,37 @@
-﻿<article class="entry card post-list">
-    <div class="entry__img-holder post-list__img-holder card__img-holder" style="background-image: url(img/content/thumb/post-8.jpg)">
-        <a href="single-post.html" class="thumb-url"></a>
-        <img src="img/content/thumb/post-8.jpg" alt="" class="entry__img d-none">
-        <a href="categories.html" class="entry__meta-category entry__meta-category--label entry__meta-category--align-in-corner entry__meta-category--blue">موبایل و گجت</a>
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Extensions
+@using MyCms.WebApp.Models
+
+
+<article class="entry card post-list">
+    <div class="entry__img-holder post-list__img-holder card__img-holder" style="background-image: url(@(NewsDto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png"))">
+        <a href="/NewsDetails/@NewsDto.Id" class="thumb-url"></a>
+        <img src="@(NewsDto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
+             alt="image news" class="entry__img d-none">
+        <a href="/NewsDetails/@NewsDto.Id"
+           class="entry__meta-category entry__meta-category--label entry__meta-category--align-in-corner entry__meta-category--blue">
+            @NewsDto.CategoryTitle
+        </a>
     </div>
 
     <div class="entry__body post-list__body card__body">
         <div class="entry__header">
             <h2 class="entry__title">
-                <a href="single-post.html">گوشی تاشو هواوی میت ایکس در تاریخ مقرر عرضه می‌شود</a>
+                <a href="/NewsDetails/@NewsDto.Id">@NewsDto.Title</a>
             </h2>
             <ul class="entry__meta">
-                <li class="entry__meta-author">
-                    <span>نویسنده:</span>
-                    <a href="#">بهرامی راد</a>
-                </li>
                 <li class="entry__meta-date">
-                    ۴ اردیبهشت ۱۳۹۸
+                    @NewsDto.CreateAt.ToShamsiWithMonthName()
                 </li>
             </ul>
         </div>
         <div class="entry__excerpt">
-            <p>عد از اعلام تصمیم سامسونگ برای به عقب انداختن عرضه گلکسی فولد، شایعاتی مبنی بر احتمال تاخیر در عرضه ...</p>
+            <p>@NewsDto.ShortDescription</p>
         </div>
     </div>
 </article>
 
 @code {
-
+    [Parameter]
+    public NewsDto NewsDto { get; set; }
 }

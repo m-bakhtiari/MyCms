@@ -1,17 +1,71 @@
-﻿<aside class="widget widget_mc4wp_form_widget">
-    <h4 class="widget-title">خبرنامه</h4>
+﻿@using MyCms.WebApp.Models
+@using System.Net
+
+<ShowErrorModal @ref="@Modal" ModalTitle="@ModalTitle" ModalText="@ModalText"></ShowErrorModal>
+<aside class="widget widget_mc4wp_form_widget">
+    <h4 class="widget-title">ثبت نام</h4>
     <p class="newsletter__text">
         <i class="ui-email newsletter__icon"></i>
-        برای اطلاع از آخرین خبرها مشترک شوید
+        برای اطلاع از آخرین خبرها عضو شوید
     </p>
-    <form class="mc4wp-form" method="post">
-        <div class="mc4wp-form-fields">
+    <form class="mc4wp-form">
+        <div>
             <div class="form-group">
-                <input type="email" name="EMAIL" placeholder="ایمیل" required="">
+                <input type="text" @bind="User.FullName" placeholder="نام شما">
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-lg btn-color" value="عضویت">
+                <input type="email" @bind="User.Email" placeholder="ایمیل">
+            </div>
+            <div class="form-group">
+                <input type="password" @bind="User.Password" placeholder="رمز عبور">
+            </div>
+            <div class="form-group">
+                <input class="btn btn-lg btn-color" @onclick="RegisterTask" value="عضویت">
             </div>
         </div>
     </form>
 </aside>
+
+@code
+{
+    private ShowErrorModal Modal { get; set; }
+    public UserViewModel User { get; set; } = new UserViewModel();
+
+    private string ModalTitle { get; set; }
+    private string ModalText { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private async Task RegisterTask()
+    {
+        if (string.IsNullOrWhiteSpace(User.Email))
+        {
+            ModalTitle = "خطا";
+            ErrorMessage = "ایمیل را وارد نمایید";
+            ModalText = $"ثبت نام با خطا مواجه شد. {ErrorMessage}";
+            Modal.Open();
+        }
+        else if (string.IsNullOrWhiteSpace(User.Password))
+        {
+            ModalTitle = "خطا";
+            ErrorMessage = "رمز عبور را وارد نمایید";
+            ModalText = $"ثبت نام با خطا مواجه شد. {ErrorMessage} ";
+            Modal.Open();
+        }
+        else
+        {
+            var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/User", User);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                ModalTitle = "عملیات موفق";
+                ModalText = "ثبت نام با موفقیت انجام شد";
+                Modal.Open();
+            }
+            else
+            {
+                ModalTitle = "خطا";
+                ModalText = $"ثبت نام با خطا مواجه شد. لطفا {ErrorMessage} را وارد نمایید";
+                Modal.Open();
+            }
+        }
+    }
+}

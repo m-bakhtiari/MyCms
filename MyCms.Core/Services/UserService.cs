@@ -29,8 +29,14 @@ namespace MyCms.Core.Services
 
         public async Task<OpRes> RegisterUser(UserViewModel userViewModel)
         {
+            var validate = await ValidateUserInfo(userViewModel);
+            if (validate.IsNullOrWhiteSpace() == false)
+            {
+                return OpRes.BuildError(validate);
+            }
             OpRes res;
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
             if (userViewModel.IsAdmin)
                 res = await AddAdminAsync(userViewModel);
             else
@@ -43,12 +49,6 @@ namespace MyCms.Core.Services
 
         private async Task<OpRes> AddUserAsync(UserViewModel userViewModel)
         {
-            var validate = await ValidateUserInfo(userViewModel);
-            if (validate.IsNullOrWhiteSpace() == false)
-            {
-                return OpRes.BuildError(validate);
-            }
-
             var userId = await AddRawUser(userViewModel);
             var userRole = new UserRole(userId, Const.UserRoleId);
             await _userRoleRepository.AddUserRoleAsync(userRole);
@@ -59,12 +59,6 @@ namespace MyCms.Core.Services
 
         public async Task<OpRes> AddAdminAsync(UserViewModel userViewModel)
         {
-            var validate = await ValidateUserInfo(userViewModel);
-            if (validate.IsNullOrWhiteSpace() == false)
-            {
-                return OpRes.BuildError(validate);
-            }
-
             var userId = await AddRawUser(userViewModel);
             var userRole = new UserRole(userId, Const.AdminRoleId);
             await _userRoleRepository.AddUserRoleAsync(userRole);

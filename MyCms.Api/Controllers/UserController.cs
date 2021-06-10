@@ -15,7 +15,6 @@ namespace MyCms.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [PermissionChecker]
     public class UserController : ControllerBase
     {
         #region Constructor
@@ -30,14 +29,18 @@ namespace MyCms.Api.Controllers
 
         // GET: api/User
         [HttpGet]
+        [PermissionChecker]
         public async Task<IActionResult> GetUser(UserSearchItem item)
         {
             var res = await _userService.GetUserByPaging(item);
             return Ok(res);
         }
 
-        // POST: api/User
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// ثبت نام کاربر جدید
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> RegisterUser(UserViewModel user)
@@ -52,6 +55,7 @@ namespace MyCms.Api.Controllers
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
+        [PermissionChecker]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var role = await _userService.DeleteUser(id);

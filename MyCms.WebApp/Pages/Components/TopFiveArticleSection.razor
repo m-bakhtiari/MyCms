@@ -1,0 +1,31 @@
+﻿@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+<div class="col-lg-8 blog__content mb-72">
+    <section class="section">
+        <div class="title-wrap title-wrap--line">
+            <h3 class="section-title">اخبار تاپ کالا</h3>
+            <a href="/NewsList" class="all-posts-url">نمایش همه</a>
+        </div>
+        @foreach (var item in Result.Items)
+        {
+            <Article NewsDto="@item"></Article>
+        }
+    </section>
+</div>
+
+@code
+{
+    public PagedResult<NewsDto, NewsSearchItem> Result { get; set; } = new PagedResult<NewsDto, NewsSearchItem>() {Items = new List<NewsDto>()};
+
+    protected override async Task OnInitializedAsync()
+    {
+        var searchItem = new NewsSearchItem()
+        {
+            HasPaging = true,
+            ItemPerPage = 6,
+            PageId = 1,
+        };
+        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/News", searchItem);
+        Result = await response.Content.ReadFromJsonAsync<PagedResult<NewsDto, NewsSearchItem>>();
+    }
+}
