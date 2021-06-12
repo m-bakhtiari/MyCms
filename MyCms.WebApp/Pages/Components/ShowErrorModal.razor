@@ -3,7 +3,7 @@
 <div class="modal @ModalClass" tabindex="-1" style="display:@ModalDisplay">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header @ModalStatus">
                 <h5 class="modal-title">@ModalTitle</h5>
             </div>
             <div class="modal-body">
@@ -30,6 +30,9 @@
 
     [Parameter]
     public string ModalText { get; set; }
+
+    [Parameter]
+    public string ModalStatus { get; set; }
 
     private Guid Guid = Guid.NewGuid();
     private string ModalDisplay = "none;";

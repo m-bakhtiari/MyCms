@@ -1,17 +1,17 @@
-﻿@page "/NewsList/{Id?}"
+﻿@page "/NewsList/{Id?}/{Title?}"
 @using MyCms.Domain.Dto
 @using MyCms.WebApp.Models
 
 
-<Breadcrumbs></Breadcrumbs>
+<Breadcrumbs CategoryId="@int.Parse(Id)" CategoryTitle="@Title"></Breadcrumbs>
 
 <div class="main-container container" id="main-container">
     <div class="row">
         <div class="col-lg-8 blog__content mb-72">
-            <h1 class="page-title">تکنولوژی</h1>
+            <h1 class="page-title">@Title</h1>
             @foreach (var item in NewsModel.Items)
             {
-                <TabNewsArticle NewsDto="@item"></TabNewsArticle>
+                <Article NewsDto="@item"></Article>
             }
             <Pagination></Pagination>
         </div>
@@ -22,18 +22,22 @@
 @code
 {
     [Parameter]
-    public int Id { get; set; }
+    public string Id { get; set; }
 
-    private PagedResult<NewsDto, NewsSearchItem> NewsModel { get; set; } = new PagedResult<NewsDto, NewsSearchItem>(){Items = new List<NewsDto>()};
+    [Parameter]
+    public string Title { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    private PagedResult<NewsDto, NewsSearchItem> NewsModel { get; set; } = new PagedResult<NewsDto, NewsSearchItem>() { Items = new List<NewsDto>() };
+
+    protected override async Task OnParametersSetAsync()
     {
         var searchItem = new NewsSearchItem()
         {
-            CategoryId = Id,
+            CategoryId =int.Parse(Id),
             HasPaging = true,
             ItemPerPage = 4,
             PageId = 1,
+            Title = Title
         };
         var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/News", searchItem);
         NewsModel = await response.Content.ReadFromJsonAsync<PagedResult<NewsDto, NewsSearchItem>>();

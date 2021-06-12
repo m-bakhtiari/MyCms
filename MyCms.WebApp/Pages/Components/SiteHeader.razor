@@ -1,13 +1,14 @@
 ﻿@using MyCms.Domain.Dto
 @using MyCms.WebApp.Models
 
+
+<LoginModal @ref="@Modal"></LoginModal>
 <div class="top-bar d-none d-lg-block">
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
                 <ul class="top-menu">
-                    <li><a href="#">ورود به سایت</a></li>
-                    <li><a href="#">ثبت نام در سایت</a></li>
+                    <li><a class="text-light fw-bolder" @onclick="()=>Modal.Open()">ورود به سایت</a></li>
                 </ul>
             </div>
             <div class="col-lg-6">
@@ -77,6 +78,8 @@
 
 @code
 {
+    public LoginModal Modal { get; set; }
+
     public PagedResult<CategoryDto, CategorySearchItem> CategoryDto { get; set; } = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>() };
 
     protected override async Task OnInitializedAsync()

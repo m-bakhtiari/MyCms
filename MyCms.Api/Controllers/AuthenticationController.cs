@@ -61,7 +61,14 @@ namespace MyCms.Api.Controllers
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOption);
 
-            return Ok(new { token = tokenString });
+            return Ok(new AccessToken() { Token = tokenString });
         }
+
+
+    }
+
+    public class AccessToken
+    {
+        public string Token { get; set; }
     }
 }

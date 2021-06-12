@@ -3,6 +3,8 @@ using MyCms.Core.Interfaces;
 using MyCms.Core.Services;
 using MyCms.Data.Repositories;
 using MyCms.Domain.Interfaces;
+using MyCms.WebApp.Services;
+using MyCms.WebApp.Services.Interfaces;
 
 namespace MyCms.IoC.DependencyInjections
 {

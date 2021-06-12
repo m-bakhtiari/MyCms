@@ -18,7 +18,7 @@
                     }
                 </div>
                 <Pagination></Pagination>
-                <AddComment></AddComment>
+                <AddComment Id="@int.Parse(Id)"></AddComment>
             </div>
         </div>
         <FavoriteNewsBar></FavoriteNewsBar>
@@ -46,7 +46,7 @@
             NewsId = int.Parse(Id),
             PageId = 1
         };
-        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/NewsComment", commentSearch);
+        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/FilterComment", commentSearch);
         Comment = await response.Content.ReadFromJsonAsync<PagedResult<NewsCommentDto, NewsCommentSearchItem>>();
     }
 

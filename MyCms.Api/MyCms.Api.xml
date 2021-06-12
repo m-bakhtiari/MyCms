@@ -17,11 +17,18 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MyCms.Api.Controllers.NewsCommentController.GetNewsComment(MyCms.Domain.Dto.NewsCommentSearchItem)">
+        <member name="M:MyCms.Api.Controllers.FilterCommentController.FilterByPagingNewsComment(MyCms.Domain.Dto.NewsCommentSearchItem)">
             <summary>
             گرفتن کامنت ها با امکان سرچ و صفحه بندی
             </summary>
             <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MyCms.Api.Controllers.NewsCommentController.PostNews(MyCms.Core.ViewModels.NewsCommentViewModel)">
+            <summary>
+            فرستادن نظر کاربران یا جواب دادن کامنت کاربر
+            </summary>
+            <param name="comment"></param>
             <returns></returns>
         </member>
         <member name="M:MyCms.Api.Controllers.NewsController.GetNewsByFilter(MyCms.Domain.Dto.NewsSearchItem)">

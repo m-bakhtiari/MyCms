@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using MyCms.Data.Context;
 using MyCms.Extensions.Consts;
@@ -82,7 +83,7 @@ namespace MyCms.Api
                     builder.AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                    //.AllowCredentials()
+                        //.AllowCredentials()
                     .Build();
                 });
             });
@@ -112,6 +113,15 @@ namespace MyCms.Api
             app.UseCors("EnableCors");
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors(policy =>
+                policy.WithOrigins("http://localhost:63950", "https://localhost:44396")
+                    .AllowAnyMethod()
+                    .WithHeaders(HeaderNames.ContentType));
+            app.UseCors(policy =>
+                policy.WithOrigins("http://localhost:53221", "https://localhost:44380")
+                    .AllowAnyMethod()
+                    .WithHeaders(HeaderNames.ContentType));
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,7 +1,7 @@
 ﻿@using MyCms.WebApp.Models
 @using System.Net
 
-<ShowErrorModal @ref="@Modal" ModalTitle="@ModalTitle" ModalText="@ModalText"></ShowErrorModal>
+<ShowErrorModal @ref="@Modal" ModalTitle="@ModalTitle" ModalText="@ModalText" ModalStatus="@ModalStatus"></ShowErrorModal>
 <aside class="widget widget_mc4wp_form_widget">
     <h4 class="widget-title">ثبت نام</h4>
     <p class="newsletter__text">
@@ -11,16 +11,16 @@
     <form class="mc4wp-form">
         <div>
             <div class="form-group">
-                <input type="text" @bind="User.FullName" placeholder="نام شما">
+                <input type="text" @bind="User.FullName" placeholder="نام شما" />
             </div>
             <div class="form-group">
-                <input type="email" @bind="User.Email" placeholder="ایمیل">
+                <input type="email" @bind="User.Email" placeholder="ایمیل" />
             </div>
             <div class="form-group">
-                <input type="password" @bind="User.Password" placeholder="رمز عبور">
+                <input type="password" @bind="User.Password" placeholder="رمز عبور" />
             </div>
             <div class="form-group">
-                <input class="btn btn-lg btn-color" @onclick="RegisterTask" value="عضویت">
+                <input class="btn btn-lg btn-color" @onclick="RegisterTask" value="عضویت" />
             </div>
         </div>
     </form>
@@ -34,6 +34,7 @@
     private string ModalTitle { get; set; }
     private string ModalText { get; set; }
     private string ErrorMessage { get; set; }
+    private string ModalStatus { get; set; }
 
     private async Task RegisterTask()
     {
@@ -42,6 +43,7 @@
             ModalTitle = "خطا";
             ErrorMessage = "ایمیل را وارد نمایید";
             ModalText = $"ثبت نام با خطا مواجه شد. {ErrorMessage}";
+            ModalStatus = "bg-warning";
             Modal.Open();
         }
         else if (string.IsNullOrWhiteSpace(User.Password))
@@ -49,6 +51,7 @@
             ModalTitle = "خطا";
             ErrorMessage = "رمز عبور را وارد نمایید";
             ModalText = $"ثبت نام با خطا مواجه شد. {ErrorMessage} ";
+            ModalStatus = "bg-warning";
             Modal.Open();
         }
         else
@@ -58,12 +61,14 @@
             {
                 ModalTitle = "عملیات موفق";
                 ModalText = "ثبت نام با موفقیت انجام شد";
+                ModalStatus = "bg-success";
                 Modal.Open();
             }
             else
             {
                 ModalTitle = "خطا";
                 ModalText = $"ثبت نام با خطا مواجه شد. لطفا {ErrorMessage} را وارد نمایید";
+                ModalStatus = "bg-warning";
                 Modal.Open();
             }
         }

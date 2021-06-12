@@ -1,0 +1,69 @@
+﻿@using MyCms.WebApp.Models
+@using System.Net
+@using MyCms.WebApp.Services.Interfaces
+@inject ILocalStorageService _localStorageService;
+<div class="row container modal @ModalClass" tabindex="-1" style="display: @ModalDisplay">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title">ورود به سایت</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label>ایمیل</label>
+                    <input type="email" class="form-group" @bind="Login.Email" placeholder="Email" />
+                </div>
+                <div class="row">
+                    <label>رمز عبور</label>
+                    <input type="password" class="form-group" @bind="Login.Password" placeholder="Password" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success bg-success d-block" @onclick="LoginUser">ورود به سایت</button>
+                <button type="button" class="btn btn-secondary bg-primary" data-bs-dismiss="modal" @onclick="() => Close()">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code
+{
+    public LoginViewModel Login { get; set; } = new LoginViewModel();
+    public AccessToken AccessToken { get; set; } = new AccessToken();
+
+    private Guid Guid = Guid.NewGuid();
+    private string ModalDisplay = "none;";
+    private string ModalClass = "";
+    private bool ShowBackdrop = false;
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    private void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+
+    private async Task LoginUser()
+    {
+        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/Authentication", Login);
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            AccessToken = await response.Content.ReadFromJsonAsync<AccessToken>();
+            await _localStorageService.SetItem("Token", AccessToken.Token);
+        }
+    }
+}

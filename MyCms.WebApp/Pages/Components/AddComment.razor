@@ -1,28 +1,74 @@
-﻿<div id="respond" class="comment-respond">
+﻿@using MyCms.WebApp.Models
+@using System.Net
+@using System.Net.Http.Headers
+@using System.Text
+@using System.Text.Json
+@using System.Threading
+@using MyCms.WebApp.Services.Interfaces
+@inject NavigationManager _navigationManager
+@inject ILocalStorageService _localStorageService
+
+<ShowErrorModal @ref="@Modal" ModalText="@ModalText" ModalTitle="@ModalTitle" ModalStatus="@ModalStatus"></ShowErrorModal>
+<LoginModal @ref="@LoginModal"></LoginModal>
+
+<div id="respond" class="comment-respond">
     <div class="title-wrap">
         <h5 class="comment-respond__title section-title">دیدگاه شما</h5>
     </div>
-    <form id="form" class="comment-form" method="post" action="#">
+    <form id="form" class="comment-form">
         <p class="comment-form-comment">
             <label for="comment">دیدگاه</label>
-            <textarea id="comment" name="comment" rows="5" required="required"></textarea>
+            <input type="text" id="comment" @bind="@Comment.Text" rows="5" required="required" />
         </p>
-        <div class="row row-20">
-            <div class="col-lg-4">
-                <label for="name">نام: *</label>
-                <input id="name" type="text">
-            </div>
-            <div class="col-lg-4">
-                <label for="comment">ایمیل: *</label>
-                <input id="email" type="email">
-            </div>
-            <div class="col-lg-4">
-                <label for="comment">رمز عبور: *</label>
-                <input id="website" type="password">
-            </div>
-        </div>
         <p class="comment-form-submit">
-            <input type="submit" class="btn btn-lg btn-color btn-button" value="ارسال دیدگاه" id="submit-message">
+            <input class="btn btn-lg btn-color btn-button" @onclick="AddCommentAsync" value="ارسال دیدگاه" id="submit-message">
         </p>
     </form>
 </div>
+
+@code
+{
+    [Parameter]
+    public int Id { get; set; }
+
+    private NewsCommentViewModel Comment { get; set; } = new NewsCommentViewModel();
+    private ShowErrorModal Modal { get; set; }
+    private LoginModal LoginModal { get; set; }
+    private string ModalText { get; set; }
+    private string ModalTitle { get; set; }
+    private string ModalStatus { get; set; }
+
+    private async Task AddCommentAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Comment.Text))
+        {
+            ModalTitle = "ثبت نظر";
+            ModalText = "متن نظر را وارد نمایید";
+            ModalStatus = "bg-warning";
+            Modal.Open();
+        }
+        Comment.NewsId = Id;
+        Console.WriteLine(await _localStorageService.GetItem<string>("Token"));
+        var request = new HttpRequestMessage()
+        {
+            Method = new HttpMethod("POST"),
+            RequestUri = new Uri(Const.ApiSiteUrl + "/api/NewsComment"),
+            Content = new StringContent(JsonSerializer.Serialize(Comment), Encoding.UTF8, "application/json"),
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItem<string>("Token"));
+        using var response = await _http.SendAsync(request);
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            ModalTitle = "ثبت نظر";
+            ModalText = "با تشکر از شما ، نظر شما با موفقیت ثبت شد";
+            ModalStatus = "bg-success";
+            Modal.Open();
+            Thread.Sleep(1500);
+            _navigationManager.NavigateTo($"/NewsDetails/{Id}", true);
+        }
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            LoginModal.Open();
+        }
+    }
+}

@@ -24,19 +24,6 @@ namespace MyCms.Api.Controllers
         }
         #endregion
 
-        /// <summary>
-        /// گرفتن کامنت ها با امکان سرچ و صفحه بندی
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetNewsComment(NewsCommentSearchItem item)
-        {
-            var res = await _newsService.GetCommentByNewsId(item);
-            return Ok(res);
-        }
-
         // GET: api/NewsComment
         [HttpGet("{newsId}")]
         [AllowAnonymous]
@@ -46,19 +33,22 @@ namespace MyCms.Api.Controllers
             return Ok(res);
         }
 
-        // POST: api/News
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //[Authorize]
-        //public async Task<ActionResult> PostNews(NewsCommentViewModel comment)
-        //{
-        //    var res = await _newsService.AddCommentAsync(comment, User.GetUserId());
-        //    if (res.IsSuccess == false)
-        //    {
-        //        return res.ToBadRequestError();
-        //    }
-        //    return Ok();
-        //}
+        /// <summary>
+        /// فرستادن نظر کاربران یا جواب دادن کامنت کاربر
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult> PostNews(NewsCommentViewModel comment)
+        {
+            var res = await _newsService.AddCommentAsync(comment, User.GetUserId());
+            if (res.IsSuccess == false)
+            {
+                return res.ToBadRequestError();
+            }
+            return Ok();
+        }
 
         // DELETE: api/NewsComment/5
         [HttpDelete("{id}")]

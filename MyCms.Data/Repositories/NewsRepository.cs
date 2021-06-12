@@ -81,7 +81,8 @@ namespace MyCms.Data.Repositories
                 {
                     news = news.Where(x =>
                         x.Title.Contains(item.Title) || x.Description.Contains(item.Title) ||
-                        x.ShortDescription.Contains(item.Title) || x.Tags.Contains(item.Title));
+                        x.ShortDescription.Contains(item.Title) || x.Tags.Contains(item.Title) || 
+                        x.CategoryTitle.Contains(item.Title));
                 }
 
                 if (item.CategoryId != null)

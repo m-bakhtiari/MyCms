@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MyCms.Core\MyCms.Core.csproj" />
     <ProjectReference Include="..\MyCms.Data\MyCms.Data.csproj" />
+    <ProjectReference Include="..\MyCms.WebApp\MyCms.WebApp.csproj" />
   </ItemGroup>
 
 </Project>

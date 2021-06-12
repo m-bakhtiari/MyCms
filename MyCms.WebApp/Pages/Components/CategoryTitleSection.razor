@@ -1,5 +1,6 @@
 ﻿@using MyCms.Domain.Dto
 @using MyCms.WebApp.Models
+@using System.Text.Json
 
 
 <aside class="col-lg-4 sidebar sidebar--1 sidebar--right">
@@ -28,6 +29,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+
         CategoryDto = await _http.GetFromJsonAsync<PagedResult<CategoryDto, CategorySearchItem>>(Const.ApiSiteUrl + "/api/Category");
     }
 }
