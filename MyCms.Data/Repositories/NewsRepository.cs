@@ -74,8 +74,6 @@ namespace MyCms.Data.Repositories
             }
             else
             {
-                var count = await news.CountAsync();
-                res.CountAll = count;
                 res.ItemPerPage = item.ItemPerPage.Value;
                 if (item.Title.IsNullOrWhiteSpace() == false)
                 {
@@ -89,6 +87,7 @@ namespace MyCms.Data.Repositories
                 {
                     news = news.Where(x => x.CategoryId == item.CategoryId);
                 }
+                res.CountAll = await news.CountAsync();
                 news = news.Skip((item.PageId.Value - 1) * item.ItemPerPage.Value).Take(item.ItemPerPage.Value);
                 res.Items = await news.ToListAsync();
             }

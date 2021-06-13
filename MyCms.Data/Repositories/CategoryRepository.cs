@@ -36,13 +36,12 @@ namespace MyCms.Data.Repositories
             }
             else
             {
-                var count = await categories.CountAsync();
-                res.CountAll = count;
                 res.ItemPerPage = item.ItemPerPage.Value;
                 if (item.Title.IsNullOrWhiteSpace() == false)
                 {
                     categories = categories.Where(x => x.Title.Contains(item.Title));
                 }
+                res.CountAll = await categories.CountAsync();
                 categories = categories.Skip((item.PageId.Value - 1) * item.ItemPerPage.Value).Take(item.ItemPerPage.Value);
                 res.Items = await categories.ToListAsync();
             }

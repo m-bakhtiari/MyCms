@@ -48,7 +48,6 @@
             Modal.Open();
         }
         Comment.NewsId = Id;
-        Console.WriteLine(await _localStorageService.GetItem<string>("Token"));
         var request = new HttpRequestMessage()
         {
             Method = new HttpMethod("POST"),

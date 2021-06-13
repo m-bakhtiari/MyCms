@@ -23,24 +23,9 @@ namespace MyCms.Api.Controllers
         }
         #endregion
 
-        ///// <summary>
-        ///// گرفتن عنوان دسته بندی اخبار با قابلیت سرچ روی آنان و صفحه بندی
-        ///// </summary>
-        ///// <param name="item"></param>
-        ///// <returns></returns>
-        //[HttpGet]
-        //[AllowAnonymous]
-        //[ProducesResponseType(200, Type = typeof(PagedResult<CategoryDto, CategorySearchItem>))]
-        //public async Task<IActionResult> GetCategory(CategorySearchItem item)
-        //{
-        //    var res = await _categoryService.GetCategoryByPaging(item);
-        //    return Ok(res);
-        //}
-
         /// <summary>
         /// گرفتن تمام عنوان دسته بندی اخبار 
         /// </summary>
-        /// <param name="item"></param>
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]

@@ -1,0 +1,108 @@
+﻿@page "/ManageCategory"
+
+@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+@using System.Text.Json
+@using System.Text
+@using System.Net.Http.Headers
+@using MyCms.WebApp.Services.Interfaces
+@using System.Net
+@inject ILocalStorageService _localStorageService
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+@{var counter = 1;}
+<LoginModal @ref="@LoginModal"></LoginModal>
+<div class="container mt-4">
+    <h3>لیست دسته بندی اخبار</h3>
+    <div>
+        <a class="btn bg-success text-white">Add</a>
+    </div>
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>نام</th>
+                <th>تعداد اخبار</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Result.Items)
+            {
+                <tr>
+                    <td>
+                        @counter
+                        <div class="d-none">@(counter++)</div>
+                    </td>
+                    <td>@item.Title</td>
+                    <td class="text-center">@item.CategoryNewsCount</td>
+                    <td>
+                        <a class="btn btn-warning bg-warning">Edit</a>
+                        <a class="btn btn-danger bg-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-right">
+                    <nav class="pagination">
+                        @for (var i = 1; i <= PageCount; i++)
+                        {
+                            var j = i;
+                            <a style="cursor: pointer" class="pagination__page
+                           @(PageId==i?"pagination__page--current text-light":"") fw-bold" @onclick="()=>MoveToPage(j)">@i</a>
+                    }
+                    </nav>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+@code {
+    public PagedResult<CategoryDto, CategorySearchItem> Result { get; set; } = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>() };
+    private LoginModal LoginModal { get; set; }
+    private int PageCount { get; set; }
+    private int PageId { get; set; } = 1;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetPageData();
+    }
+
+    private async Task MoveToPage(int pageId)
+    {
+        PageId = pageId;
+        await GetPageData();
+    }
+
+    private async Task GetPageData()
+    {
+        var searchItem = new CategorySearchItem()
+        {
+            HasPaging = true,
+            ItemPerPage = 10,
+            PageId = PageId,
+        };
+        var request = new HttpRequestMessage()
+        {
+            Method = new HttpMethod("POST"),
+            RequestUri = new Uri(Const.ApiSiteUrl + "/api/FilterCategory"),
+            Content = new StringContent(JsonSerializer.Serialize(searchItem), Encoding.UTF8, "application/json"),
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItem<string>("Token"));
+        using var response = await _http.SendAsync(request);
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            LoginModal.Open();
+        }
+        else if (response.StatusCode == HttpStatusCode.OK)
+        {
+            Result = await response.Content.ReadFromJsonAsync<PagedResult<CategoryDto, CategorySearchItem>>();
+            PageCount = Result.CountAll / Result.ItemPerPage;
+        }
+    }
+}

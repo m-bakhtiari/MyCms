@@ -17,7 +17,14 @@
                         <ShowComment ResponseComment="@Comment.Items.FirstOrDefault(c=>c.ParentId==item.Id)" NewsCommentDto="@item"></ShowComment>
                     }
                 </div>
-                <Pagination></Pagination>
+                <nav class="pagination">
+                    @for (var i = 1; i <= PageCount; i++)
+                    {
+                        var j = i;
+                        <a style="cursor: pointer" class="pagination__page
+                           @(PageId==i?"pagination__page--current text-light":"") fw-bold" @onclick="()=>MoveToPage(j)">@i</a>
+                    }
+                </nav>
                 <AddComment Id="@int.Parse(Id)"></AddComment>
             </div>
         </div>
@@ -32,9 +39,23 @@
 
     public NewsDto NewsDto { get; set; } = new NewsDto();
 
+    private int PageId { get; set; } = 1;
+    private int PageCount { get; set; }
+
     public PagedResult<NewsCommentDto, NewsCommentSearchItem> Comment { get; set; } = new PagedResult<NewsCommentDto, NewsCommentSearchItem>() { Items = new List<NewsCommentDto>() };
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetPageData();
+    }
+
+    private async Task MoveToPage(int pageId)
+    {
+        PageId = pageId;
+        await GetPageData();
+    }
+
+    private async Task GetPageData()
     {
         Id = Id;
         NewsDto = await _http.GetFromJsonAsync<NewsDto>(Const.ApiSiteUrl + $"/api/News/{Id}");
@@ -42,12 +63,13 @@
         var commentSearch = new NewsCommentSearchItem()
         {
             HasPaging = true,
-            ItemPerPage = 5,
+            ItemPerPage = 1,
             NewsId = int.Parse(Id),
-            PageId = 1
+            PageId = PageId
         };
         var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/FilterComment", commentSearch);
         Comment = await response.Content.ReadFromJsonAsync<PagedResult<NewsCommentDto, NewsCommentSearchItem>>();
+        PageCount = Comment.CountAll / Comment.ItemPerPage;
     }
 
 }
