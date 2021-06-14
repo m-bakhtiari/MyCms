@@ -86,6 +86,7 @@
 {
     public LoginModal Modal { get; set; }
 
+    [Parameter]
     public PagedResult<CategoryDto, CategorySearchItem> CategoryDto { get; set; } = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>() };
 
     protected override async Task OnInitializedAsync()

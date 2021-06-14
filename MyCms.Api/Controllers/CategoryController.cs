@@ -71,13 +71,16 @@ namespace MyCms.Api.Controllers
             return Ok();
         }
 
-        // POST: api/Category
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// ایجاد دسته بندی خبر جدید
+        /// </summary>
+        /// <param name="categoryViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [PermissionChecker]
-        public async Task<ActionResult> PostCategory(CategoryViewModel CategoryViewModel)
+        public async Task<ActionResult> PostCategory(CategoryViewModel categoryViewModel)
         {
-            var res = await _categoryService.AddAsync(CategoryViewModel);
+            var res = await _categoryService.AddAsync(categoryViewModel);
             if (res.IsSuccess == false)
             {
                 return res.ToBadRequestError();

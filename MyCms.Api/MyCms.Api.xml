@@ -10,6 +10,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:MyCms.Api.Controllers.CategoryController.PostCategory(MyCms.Core.ViewModels.CategoryViewModel)">
+            <summary>
+            ایجاد دسته بندی خبر جدید
+            </summary>
+            <param name="categoryViewModel"></param>
+            <returns></returns>
+        </member>
         <member name="M:MyCms.Api.Controllers.CategoryNewsController.GetCategoryWithFirstNews">
             <summary>
             گرفتن لیست گروه ها به همراه تازه ترین خبر آنها

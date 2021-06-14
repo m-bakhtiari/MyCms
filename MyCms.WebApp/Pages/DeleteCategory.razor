@@ -1,29 +1,23 @@
 ﻿@using MyCms.WebApp.Models
-@using System.Text
-@using System.Text.Json
 @using System.Net.Http.Headers
 @using System.Net
 @using MyCms.WebApp.Services.Interfaces
 @inject ILocalStorageService _localStorageService
 @inject NavigationManager _navigationManager
 
-
 <LoginModal @ref="@LoginModal"></LoginModal>
 <div class="modal @ModalClass" tabindex="-1" style="display:@ModalDisplay">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                @*<h5 class="modal-title">@(Category.Id==null?"ایجاد گروه جدید":"ویرایش")</h5>*@
-                <h5 class="modal-title">@Title</h5>
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">حذف</h5>
             </div>
             <div class="modal-body">
-                <label>نام</label>
-                <input type="text" class="form-group" @bind="Category.Name" />
-                <input type="hidden" @bind="Category.Id" />
+                <span>آیا از حذف اطمینان دارید؟</span>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn bg-success" data-bs-dismiss="modal" @onclick="SumbitForm">ذخیره</button>
-                <button type="button" class="btn bg-primary" data-bs-dismiss="modal" @onclick="() => Close()">بستن</button>
+                <button type="button" class="btn bg-success" @onclick="SumbitForm">ذخیره</button>
+                <button type="button" class="btn bg-primary" @onclick="() => Close()">بستن</button>
             </div>
         </div>
     </div>
@@ -36,9 +30,7 @@
 
 @code
 {
-    public CategoryViewModel Category { get; set; } = new CategoryViewModel();
-
-    public string Title { get; set; }
+    public int Id { get; set; }
 
     private LoginModal LoginModal { get; set; }
 
@@ -47,11 +39,9 @@
     private string ModalClass = "";
     private bool ShowBackdrop = false;
 
-    public void Open(string title, CategoryViewModel category)
+    public void Open(int id)
     {
-        Title = title;
-        Category = category;
-
+        Id = id;
         ModalDisplay = "block;";
         ModalClass = "Show";
         ShowBackdrop = true;
@@ -68,21 +58,11 @@
 
     private async Task SumbitForm()
     {
-        Category.Id ??= 0;
         var request = new HttpRequestMessage()
         {
-            Content = new StringContent(JsonSerializer.Serialize(Category), Encoding.UTF8, "application/json"),
+            Method = new HttpMethod("Delete"),
+            RequestUri = new Uri(Const.ApiSiteUrl + $"/api/Category/{Id}"),
         };
-        if (Category.Id==0)
-        {
-            request.Method = new HttpMethod("POST");
-            request.RequestUri = new Uri(Const.ApiSiteUrl + "/api/Category");
-        }
-        else
-        {
-            request.Method = new HttpMethod("PUT");
-            request.RequestUri = new Uri(Const.ApiSiteUrl + $"/api/Category/{Category.Id}");
-        }
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItem<string>("Token"));
         using var response = await _http.SendAsync(request);
         if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -97,3 +77,4 @@
         }
     }
 }
+
