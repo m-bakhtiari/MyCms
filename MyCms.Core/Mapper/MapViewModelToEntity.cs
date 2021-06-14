@@ -1,6 +1,7 @@
 ﻿using MyCms.Core.ViewModels;
 using MyCms.Domain.Entities;
 using System;
+using MyCms.Domain.Dto;
 
 namespace MyCms.Core.Mapper
 {
@@ -46,6 +47,20 @@ namespace MyCms.Core.Mapper
                 ParentId = comment.ParentId,
                 UserId = userId,
                 Text = comment.Text,
+            };
+        }
+
+        public static NewsViewModel ToNewsViewModel(this NewsDto newsDto)
+        {
+            return new NewsViewModel()
+            {
+                CategoryId = newsDto.CategoryId,
+                Description = newsDto.Description,
+                ShortDescription = newsDto.ShortDescription,
+                Id = newsDto.Id,
+                ImageName = newsDto.ImageName,
+                Title = newsDto.Title,
+                Tags = newsDto.Tags
             };
         }
     }

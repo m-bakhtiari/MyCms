@@ -38,8 +38,11 @@ namespace MyCms.Core.Services
             }
 
             var news = newsViewModel.ToNews();
-            var newsImage = await AddProductImage(newsViewModel.Image);
-            news.ImageName = newsImage;
+            if (newsViewModel.ImageName != null)
+            {
+                var newsImage = await AddProductImage(newsViewModel.Image);
+                news.ImageName = newsImage;
+            }
             news.IsDeleted = false;
             news.CreateAt = DateTime.Now;
             await _newsRepository.AddAsync(news);
@@ -122,9 +125,10 @@ namespace MyCms.Core.Services
             return OpRes.BuildSuccess();
         }
 
-        public async Task<NewsDto> GetNewsByNewsId(int newsId)
+        public async Task<NewsViewModel> GetNewsByNewsId(int newsId)
         {
-            return await _newsRepository.GetNewsByNewsIdAsync(newsId);
+            var res = await _newsRepository.GetNewsByNewsIdAsync(newsId);
+            return res.ToNewsViewModel();
         }
 
         public async Task<PagedResult<NewsDto, NewsSearchItem>> GetNewsByPaging(NewsSearchItem item)

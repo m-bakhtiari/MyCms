@@ -57,7 +57,7 @@
             PageId = PageId,
             Title = Title
         };
-        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/News", searchItem);
+        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/FilterNews", searchItem);
         NewsModel = await response.Content.ReadFromJsonAsync<PagedResult<NewsDto, NewsSearchItem>>();
         PageCount = NewsModel.CountAll / NewsModel.ItemPerPage;
     }

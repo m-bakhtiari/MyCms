@@ -37,6 +37,13 @@
             <param name="item"></param>
             <returns></returns>
         </member>
+        <member name="M:MyCms.Api.Controllers.FilterNewsController.GetNewsByFilter(MyCms.Domain.Dto.NewsSearchItem)">
+            <summary>
+            گرفتن اخبار با نام دسته بندی آنان با امکان صفحه بندی و سرچ روی اخبار
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
         <member name="M:MyCms.Api.Controllers.NewsCommentController.PostNews(MyCms.Core.ViewModels.NewsCommentViewModel)">
             <summary>
             فرستادن نظر کاربران یا جواب دادن کامنت کاربر
@@ -44,18 +51,26 @@
             <param name="comment"></param>
             <returns></returns>
         </member>
-        <member name="M:MyCms.Api.Controllers.NewsController.GetNewsByFilter(MyCms.Domain.Dto.NewsSearchItem)">
-            <summary>
-            گرفتن اخبار با نام دسته بندی آنان با امکان صفحه بندی و سرچ روی اخبار
-            </summary>
-            <param name="item"></param>
-            <returns></returns>
-        </member>
         <member name="M:MyCms.Api.Controllers.NewsController.GetNews(System.Int32)">
             <summary>
             گرفتن اطلاعات یک خبر
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MyCms.Api.Controllers.NewsController.PutNews(System.Int32,MyCms.Core.ViewModels.NewsViewModel)">
+            <summary>
+            ویرایش خبر
+            </summary>
+            <param name="id"></param>
+            <param name="newsViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MyCms.Api.Controllers.NewsController.PostNews(MyCms.Core.ViewModels.NewsViewModel)">
+            <summary>
+            اضافه کردن خبر جدید
+            </summary>
+            <param name="newsViewModel"></param>
             <returns></returns>
         </member>
         <member name="M:MyCms.Api.Controllers.TopNewsLikeController.GetTopNewsLike">

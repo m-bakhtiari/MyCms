@@ -1,0 +1,80 @@
+﻿@using MyCms.WebApp.Models
+@using System.Net.Http.Headers
+@using System.Net
+@using MyCms.WebApp.Services.Interfaces
+@inject ILocalStorageService _localStorageService
+@inject NavigationManager _navigationManager
+
+<LoginModal @ref="@LoginModal"></LoginModal>
+<div class="modal @ModalClass" tabindex="-1" style="display:@ModalDisplay">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">حذف</h5>
+            </div>
+            <div class="modal-body">
+                <span>آیا از حذف اطمینان دارید؟</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-success" @onclick="SumbitForm">ذخیره</button>
+                <button type="button" class="btn bg-primary" @onclick="() => Close()">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code
+{
+    public int Id { get; set; }
+
+    private LoginModal LoginModal { get; set; }
+
+    private Guid Guid = Guid.NewGuid();
+    private string ModalDisplay = "none;";
+    private string ModalClass = "";
+    private bool ShowBackdrop = false;
+
+    public void Open(int id)
+    {
+        Id = id;
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    private void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+
+    private async Task SumbitForm()
+    {
+        var request = new HttpRequestMessage()
+        {
+            Method = new HttpMethod("Delete"),
+            RequestUri = new Uri(Const.ApiSiteUrl + $"/api/News/{Id}"),
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItem<string>("Token"));
+        using var response = await _http.SendAsync(request);
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            Close();
+            LoginModal.Open();
+        }
+        else if (response.StatusCode == HttpStatusCode.OK)
+        {
+            Close();
+            _navigationManager.NavigateTo("/ManageNews", true);
+        }
+    }
+}
+

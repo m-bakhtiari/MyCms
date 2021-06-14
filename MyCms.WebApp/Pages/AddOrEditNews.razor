@@ -1,0 +1,113 @@
+﻿@page "/AddOrEditNews/{Title}/{CategoryId?}/{Id?}"
+
+@using MyCms.WebApp.Models
+@using System.Text
+@using System.Text.Json
+@using System.Net.Http.Headers
+@using System.Net
+@using MyCms.Domain.Dto
+@using MyCms.WebApp.Services.Interfaces
+@inject ILocalStorageService _localStorageService
+@inject NavigationManager _navigationManager
+
+<LoginModal @ref="@LoginModal"></LoginModal>
+<div class="container mt-4">
+    <h3>@Title</h3>
+    <div class="row">
+        <label>عنوان</label>
+        <input type="text" class="form-group" @bind="News.Title" />
+        <input type="hidden" @bind="News.Id" />
+    </div>
+    <div class="row">
+        <label>گروه بندی خبر</label>
+        <select @bind="@News.CategoryId">
+            @foreach (var item in CategoryDto.Items)
+            {
+                <option value="@item.Id">@item.Title</option>
+            }
+        </select>
+    </div>
+    <div class="row">
+        <label>کلمات کلیدی</label>
+        <input type="text" class="form-group" @bind="News.Tags" />
+    </div>
+    <div class="row">
+        <label>توضیح مختصر</label>
+        <input type="text" class="form-group" @bind="News.ShortDescription" />
+    </div>
+    <div class="row">
+        <label>متن کامل خبر</label>
+        <textarea class="form-group" @bind="News.Description"></textarea>
+    </div>
+    <div class="row">
+        <label>عکس</label>
+        @*<input type="file" @bind="News.Image"/>*@
+        <img src="" alt="" />
+    </div>
+    <div class="row">
+        <button type="button" class="btn bg-success" @onclick="SubmitForm">ذخیره</button>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public string Id { get; set; }
+    [Parameter]
+    public string CategoryId { get; set; }
+    [Parameter]
+    public string Title { get; set; }
+
+    private NewsViewModel News { get; set; } = new NewsViewModel();
+    private LoginModal LoginModal { get; set; }
+    public PagedResult<CategoryDto, CategorySearchItem> CategoryDto { get; set; } = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>() };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = Title;
+        if (Id == null)
+        {
+            CategoryId = CategoryId;
+            News.CategoryId = int.Parse(CategoryId);
+        }
+        else
+        {
+            Id = Id;
+            News = await _http.GetFromJsonAsync<NewsViewModel>(Const.ApiSiteUrl + $"/api/News/{Id}");
+        }
+        CategoryDto = await _http.GetFromJsonAsync<PagedResult<CategoryDto, CategorySearchItem>>(Const.ApiSiteUrl + "/api/Category");
+    }
+
+    private async Task SubmitForm()
+    {
+        News.Id ??= 0;
+        var request = new HttpRequestMessage()
+        {
+            Content = new StringContent(JsonSerializer.Serialize(News), Encoding.UTF8, "application/json"),
+        };
+        Console.WriteLine(News.CategoryId);
+        Console.WriteLine(News.Id);
+        Console.WriteLine(News.Title);
+        Console.WriteLine(News.Description);
+        if (News.Id == 0)
+        {
+            request.Method = new HttpMethod("POST");
+            request.RequestUri = new Uri(Const.ApiSiteUrl + "/api/News");
+        }
+        else
+        {
+            request.Method = new HttpMethod("PUT");
+            request.RequestUri = new Uri(Const.ApiSiteUrl + $"/api/News/{News.Id}");
+        }
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItem<string>("Token"));
+        using var response = await _http.SendAsync(request);
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            LoginModal.Open();
+        }
+        else if (response.StatusCode == HttpStatusCode.OK)
+        {
+            _navigationManager.NavigateTo($"/ManageNews/{CategoryId}", true);
+        }
+    }
+}

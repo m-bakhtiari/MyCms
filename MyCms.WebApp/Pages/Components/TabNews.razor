@@ -30,7 +30,7 @@
             ItemPerPage = 4,
             PageId = 1,
         };
-        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/News", searchItem);
+        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/FilterNews", searchItem);
         NewsModel = await response.Content.ReadFromJsonAsync<PagedResult<NewsDto, NewsSearchItem>>();
     }
 }

@@ -4,7 +4,7 @@
 
 <section class="section mb-0">
     <div class="row">
-        @foreach (var item in CategoryDto.Items)
+        @foreach (var item in CategoryDto.Items.Where(x => x.CategoryNewsCount > 0))
         {
             <CategoryTopFiveNews CategoryId="@item.Id" CategoryTitle="@item.Title"></CategoryTopFiveNews>
         }

@@ -1,0 +1,134 @@
+﻿@page "/ManageNews/{Id}"
+
+@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+@using System.Text.Json
+@using System.Text
+@using System.Net.Http.Headers
+@using MyCms.WebApp.Services.Interfaces
+@using System.Net
+@inject ILocalStorageService _localStorageService
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+@{var counter = 1;}
+<LoginModal @ref="@LoginModal"></LoginModal>
+<DeleteNews @ref="DeleteNews"></DeleteNews>
+<div class="container mt-4">
+    <h3>لیست اخبار</h3>
+    <div>
+        <a class="btn bg-success text-white" href="/AddOrEditNews/@Title/@Id">Add</a>
+    </div>
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>عکس</th>
+                <th>عنوان</th>
+                <th>توضیح مختصر</th>
+                <th>کلمات کلیدی</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Result.Items)
+            {
+                <tr>
+                    <td>@(counter++)</td>
+                    <td><img src="" alt="" /></td>
+                    <td>@item.Title</td>
+                    <td>@item.ShortDescription</td>
+                    <td>@item.Tags</td>
+                    <td>
+                        <a class="btn bg-warning text-dark" href="/AddOrEditNews/@EditTitle/@Id/@item.CategoryId">Edit</a>
+                        <a class="btn bg-danger" @onclick="()=>DeleteNews.Open(item.Id)">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-right">
+                    <nav class="pagination">
+                        @for (var i = 1; i <= PageCount; i++)
+                        {
+                            var j = i;
+                            <a style="cursor: pointer" class="pagination__page
+                           @(PageId==i?"pagination__page--current text-light":"") fw-bold" @onclick="()=>MoveToPage(j)">@i</a>
+                    }
+                    </nav>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    public PagedResult<NewsDto, NewsSearchItem> Result { get; set; } = new PagedResult<NewsDto, NewsSearchItem>() { Items = new List<NewsDto>() };
+    private LoginModal LoginModal { get; set; }
+    public DeleteNews DeleteNews { get; set; } = new DeleteNews();
+    public NewsViewModel NewsVm { get; set; } = new NewsViewModel();
+    private int PageCount { get; set; }
+    private int PageId { get; set; } = 1;
+    public string Title { get; set; } = "ایجاد خبر جدید";
+    public string EditTitle { get; set; } = "ویرایش خبر";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Id = Id;
+        NewsVm.CategoryId = int.Parse(Id);
+        await GetPageData();
+    }
+
+    private async Task MoveToPage(int pageId)
+    {
+        PageId = pageId;
+        await GetPageData();
+    }
+
+    private async Task GetPageData()
+    {
+        var searchItem = new NewsSearchItem()
+        {
+            HasPaging = true,
+            ItemPerPage = 10,
+            PageId = PageId,
+            CategoryId =int.Parse(Id)
+        };
+        var request = new HttpRequestMessage()
+        {
+            Method = new HttpMethod("POST"),
+            RequestUri = new Uri(Const.ApiSiteUrl + "/api/FilterNews"),
+            Content = new StringContent(JsonSerializer.Serialize(searchItem), Encoding.UTF8, "application/json"),
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItem<string>("Token"));
+        using var response = await _http.SendAsync(request);
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            LoginModal.Open();
+        }
+        else if (response.StatusCode == HttpStatusCode.OK)
+        {
+            Result = await response.Content.ReadFromJsonAsync<PagedResult<NewsDto, NewsSearchItem>>();
+            PageCount = Result.CountAll / Result.ItemPerPage;
+        }
+    }
+
+    private static NewsViewModel ToNewsViewModel(NewsDto news)
+    {
+        return new NewsViewModel()
+        {
+            Id = news.Id,
+            Tags = news.Tags,
+            CategoryId = news.CategoryId,
+            Description = news.Description,
+            ShortDescription = news.ShortDescription,
+            ImageName = news.ImageName,
+            Title = news.Title
+        };
+    }
+}

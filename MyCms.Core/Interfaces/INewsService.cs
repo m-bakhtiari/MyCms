@@ -9,7 +9,7 @@ namespace MyCms.Core.Interfaces
     {
         #region Fetch Data
 
-        Task<NewsDto> GetNewsByNewsId(int newsId);
+        Task<NewsViewModel> GetNewsByNewsId(int newsId);
         Task<PagedResult<NewsDto, NewsSearchItem>> GetNewsByPaging(NewsSearchItem item);
 
         Task<List<NewsDto>> GetTopTenNewsByComment();

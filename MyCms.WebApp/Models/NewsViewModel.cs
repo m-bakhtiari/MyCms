@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 
-namespace MyCms.Core.ViewModels
+namespace MyCms.WebApp.Models
 {
     public class NewsViewModel
     {
@@ -13,10 +12,11 @@ namespace MyCms.Core.ViewModels
         public string Description { get; set; }
 
         public IFormFile Image { get; set; }
-        public string ImageName { get; set; }
 
         public string Tags { get; set; }
 
         public int CategoryId { get; set; }
+
+        public string ImageName { get; set; }
     }
 }

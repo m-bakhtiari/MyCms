@@ -38,7 +38,7 @@
             CategoryId = CategoryId,
             PageId = 1,
         };
-        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/News", searchItem);
+        var response = await _http.PostAsJsonAsync(Const.ApiSiteUrl + "/api/FilterNews", searchItem);
         NewsDto = await response.Content.ReadFromJsonAsync<PagedResult<NewsDto, NewsSearchItem>>();
     }
 }
