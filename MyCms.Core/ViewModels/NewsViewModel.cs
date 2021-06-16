@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using Microsoft.Extensions.FileProviders;
 
 namespace MyCms.Core.ViewModels
 {
@@ -12,7 +11,7 @@ namespace MyCms.Core.ViewModels
 
         public string Description { get; set; }
 
-        public IFormFile Image { get; set; }
+        public IFileInfo Image { get; set; }
         public string ImageName { get; set; }
 
         public string Tags { get; set; }

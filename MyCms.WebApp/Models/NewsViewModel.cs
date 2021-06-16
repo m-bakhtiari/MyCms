@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.Extensions.FileProviders;
 
 namespace MyCms.WebApp.Models
 {
@@ -11,7 +11,7 @@ namespace MyCms.WebApp.Models
 
         public string Description { get; set; }
 
-        public IFormFile Image { get; set; }
+        public IFileInfo Image { get; set; }
 
         public string Tags { get; set; }
 

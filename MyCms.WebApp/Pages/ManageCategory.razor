@@ -39,8 +39,9 @@
                     <td>@item.Title</td>
                     <td class="text-center">@item.CategoryNewsCount</td>
                     <td>
-                        <a class="btn btn-warning bg-warning" @onclick="()=>AddOrEditCategory.Open(EditTitle,ToCategoryDto(item))">Edit</a>
-                        <a class="btn btn-danger bg-danger" @onclick="()=>DeleteCategory.Open(item.Id)">Delete</a>
+                        <a class="btn bg-warning" @onclick="()=>AddOrEditCategory.Open(EditTitle,ToCategoryDto(item))">Edit</a>
+                        <a class="btn bg-danger" @onclick="()=>DeleteCategory.Open(item.Id)">Delete</a>
+                        <a class="btn bg-primary" href="/ManageNews/@item.Id">News</a>
                     </td>
                 </tr>
             }

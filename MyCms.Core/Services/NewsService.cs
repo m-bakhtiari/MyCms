@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.FileProviders;
 using MyCms.Core.Extensions;
 using MyCms.Core.Interfaces;
 using MyCms.Core.Mapper;
@@ -90,12 +91,12 @@ namespace MyCms.Core.Services
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        private async Task<string> AddProductImage(IFormFile image)
+        private async Task<string> AddProductImage(IFileInfo image)
         {
-            var imageName = StringExtensions.GenerateUniqGuidCodeWithoutDashes() + Path.GetExtension(image.FileName);
+            var imageName = StringExtensions.GenerateUniqGuidCodeWithoutDashes() + Path.GetExtension(image.Name);
             var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/ProductImage", imageName);
             await using var stream = new FileStream(imagePath, FileMode.Create);
-            await image.CopyToAsync(stream);
+            image.CreateReadStream();
             return imageName;
         }
 
