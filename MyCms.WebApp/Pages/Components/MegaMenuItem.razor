@@ -1,12 +1,10 @@
 ﻿@using MyCms.Domain.Dto
-@using MyCms.WebApp.Models
-
 
 <div class="col nav__megamenu-item">
     <article class="entry">
         <div class="entry__img-holder">
             <a href="/NewsDetails/@NewsDto.Id">
-                <img src="@(NewsDto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
+                <img src="img/NewsImage/@(string.IsNullOrWhiteSpace(NewsDto.ImageName)==false?NewsDto.ImageName:"no-image-available.png")"
                      alt="image news" class="entry__img" />
             </a>
             <a href="/NewsList/@NewsDto.Id"

@@ -5,8 +5,10 @@ using MyCms.Domain.Dto;
 using MyCms.Domain.Entities;
 using MyCms.Domain.Interfaces;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MyCms.Extensions.Consts;
 
 namespace MyCms.Data.Repositories
 {
@@ -48,7 +50,7 @@ namespace MyCms.Data.Repositories
                 Tags = x.Tags,
                 CategoryTitle = x.Category.Name,
                 CategoryId = x.CategoryId,
-                NewsCommentCount = x.NewsComments.Count
+                NewsCommentCount = x.NewsComments.Count,
             }).FirstOrDefaultAsync(x => x.Id == newsId);
         }
 

@@ -2,6 +2,7 @@
 using MyCms.Core.ViewModels;
 using MyCms.Domain.Dto;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace MyCms.Core.Interfaces
 {
@@ -21,6 +22,8 @@ namespace MyCms.Core.Interfaces
         Task<OpRes> AddNewsAsync(NewsViewModel news);
         Task<OpRes> UpdateNewsAsync(NewsViewModel news);
         Task<OpRes> DeleteNewsAsync(int newsId);
+        Task<string> AddProductImage(IFormFile image);
+        Task DeleteOldImage(IFormFile image);
 
         #region News Comments
 

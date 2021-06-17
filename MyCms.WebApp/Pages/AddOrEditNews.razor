@@ -44,8 +44,18 @@
     </div>
     <div class="row">
         <label>عکس</label>
-        <input type="file" @ref="elementReference" @onchange="async ()=>await OpenFileAsync()" />
+        <input type="file" @ref="_elementReference" @onchange="async ()=>await OpenFileAsync()" />
+        @if (string.IsNullOrWhiteSpace(News.ImageName)==false)
+        {
+            <label>عکس فعلی</label>
+            <img src="img/NewsImage/@News.ImageName"/>
+        }
         <button @onclick="async ()=>await UploadFileAsync()">Upload</button>
+        <div>
+            <p>نام عکس : @_fileName</p>
+            <p>سایز عکس : @_size</p>
+            <p>@_message</p>
+        </div>
     </div>
     <div class="row">
         <button type="button" class="btn bg-success" @onclick="SubmitForm">ذخیره</button>
@@ -63,10 +73,10 @@
 
     private NewsViewModel News { get; set; } = new NewsViewModel();
     private LoginModal LoginModal { get; set; }
-    private ElementReference _input;
     public PagedResult<CategoryDto, CategorySearchItem> CategoryDto { get; set; } = new PagedResult<CategoryDto, CategorySearchItem>() { Items = new List<CategoryDto>() };
 
-    protected override async Task OnInitializedAsync()
+
+    protected override async Task OnParametersSetAsync()
     {
         Title = Title;
         if (Id == null)
@@ -89,10 +99,6 @@
         {
             Content = new StringContent(JsonSerializer.Serialize(News), Encoding.UTF8, "application/json"),
         };
-        Console.WriteLine(News.CategoryId);
-        Console.WriteLine(News.Id);
-        Console.WriteLine(News.Title);
-        Console.WriteLine(News.Description);
         if (News.Id == 0)
         {
             request.Method = new HttpMethod("POST");
@@ -115,34 +121,31 @@
         }
     }
 
-    private ElementReference elementReference;
-    string message = string.Empty;
-    string fileName = string.Empty;
-    string type = string.Empty;
-    string size = string.Empty;
-    string imagePath = null;
-    Stream FileStream = null;
+    private ElementReference _elementReference = new ElementReference();
+    private readonly string _message = string.Empty;
+    private string _fileName = string.Empty;
+    private string _size = string.Empty;
+    private string _imagePath = null;
+    private Stream _fileStream = null;
 
     private async Task OpenFileAsync()
     {
-        var file = (await _fileReaderService.CreateReference(elementReference).EnumerateFilesAsync()).FirstOrDefault();
-        if(file==null) return;
+        var file = (await _fileReaderService.CreateReference(_elementReference).EnumerateFilesAsync()).FirstOrDefault();
+        if (file == null) return;
         var fileInfo = await file.ReadFileInfoAsync();
-        fileName = fileInfo.Name;
-        size = fileInfo.Size.ToString();
-        type = fileInfo.Type;
-        using (var memoryStream=await file.CreateMemoryStreamAsync((int)fileInfo.Size))
-        {
-            FileStream = new MemoryStream(memoryStream.ToArray());
-        }
+        _fileName = fileInfo.Name;
+        _size = fileInfo.Size.ToString();
+        await using var memoryStream = await file.CreateMemoryStreamAsync((int)fileInfo.Size);
+        _fileStream = new MemoryStream(memoryStream.ToArray());
     }
 
     private async Task UploadFileAsync()
     {
         var content = new MultipartFormDataContent();
         content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-date");
-        content.Add(new StreamContent(FileStream,(int) FileStream.Length),"image",fileName);
+        content.Add(new StreamContent(_fileStream, (int)_fileStream.Length), "image", _fileName);
         var response = await _http.PostAsync(Const.ApiSiteUrl + "/api/File", content);
-        Console.WriteLine(await response.Content.ReadAsStringAsync());
+        News.ImageName = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(News.ImageName);
     }
 }

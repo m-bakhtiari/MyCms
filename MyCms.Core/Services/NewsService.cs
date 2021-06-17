@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.FileProviders;
+﻿using Microsoft.AspNetCore.Http;
 using MyCms.Core.Extensions;
 using MyCms.Core.Interfaces;
 using MyCms.Core.Mapper;
@@ -13,6 +6,10 @@ using MyCms.Core.ViewModels;
 using MyCms.Domain.Dto;
 using MyCms.Domain.Interfaces;
 using MyCms.Extensions.Consts;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace MyCms.Core.Services
 {
@@ -39,11 +36,6 @@ namespace MyCms.Core.Services
             }
 
             var news = newsViewModel.ToNews();
-            if (newsViewModel.ImageName != null)
-            {
-                var newsImage = await AddProductImage(newsViewModel.Image);
-                news.ImageName = newsImage;
-            }
             news.IsDeleted = false;
             news.CreateAt = DateTime.Now;
             await _newsRepository.AddAsync(news);
@@ -59,7 +51,6 @@ namespace MyCms.Core.Services
                 return OpRes.BuildError(error);
             }
 
-            await DeleteOldImage(newsViewModel);
             var news = newsViewModel.ToNews();
             news.Id = newsViewModel.Id.Value;
             _newsRepository.UpdateAsync(news);
@@ -91,25 +82,23 @@ namespace MyCms.Core.Services
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        private async Task<string> AddProductImage(IFileInfo image)
+        public async Task<string> AddProductImage(IFormFile image)
         {
-            var imageName = StringExtensions.GenerateUniqGuidCodeWithoutDashes() + Path.GetExtension(image.Name);
-            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/ProductImage", imageName);
-            await using var stream = new FileStream(imagePath, FileMode.Create);
-            image.CreateReadStream();
+            var imageName = StringExtensions.GenerateUniqGuidCodeWithoutDashes() + Path.GetExtension(image.FileName);
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/NewsImage", imageName);
+
+            await using var streamUi = new FileStream(imagePath.Replace("Api", "WebApp"), FileMode.Create);
+            await image.CopyToAsync(streamUi);
+            
             return imageName;
         }
 
-        private async Task DeleteOldImage(NewsViewModel news)
+        public async Task DeleteOldImage(IFormFile image)
         {
-            var oldNews = await _newsRepository.GetNewsByNewsIdAsync(news.Id.Value);
-            if (news.Image != null)
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), Const.NewsImageLocation, image.FileName);
+            if (File.Exists(imagePath))
             {
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), Const.NewsImageLocation, oldNews.ImageName);
-                if (File.Exists(imagePath))
-                {
-                    File.Delete(imagePath);
-                }
+                File.Delete(imagePath);
             }
         }
 

@@ -1,12 +1,10 @@
 ﻿@using MyCms.Domain.Dto
 @using MyCms.WebApp.Extensions
-@using MyCms.WebApp.Models
-
 
 <article class="entry card post-list">
-    <div class="entry__img-holder post-list__img-holder card__img-holder" style="background-image: url(@(NewsDto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png"))">
+    <div class="entry__img-holder post-list__img-holder card__img-holder" style="background-image: url('img/NewsImage/@(string.IsNullOrWhiteSpace(NewsDto.ImageName)==false?NewsDto.ImageName:"no-image-available.png")')">
         <a href="/NewsDetails/@NewsDto.Id" class="thumb-url"></a>
-        <img src="@(NewsDto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
+        <img src="img/NewsImage/@(string.IsNullOrWhiteSpace(NewsDto.ImageName)==false?NewsDto.ImageName:"no-image-available.png")"
              alt="image news" class="entry__img d-none">
         <a href="/NewsDetails/@NewsDto.Id"
            class="entry__meta-category entry__meta-category--label entry__meta-category--align-in-corner entry__meta-category--blue">

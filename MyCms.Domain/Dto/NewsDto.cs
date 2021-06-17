@@ -53,5 +53,10 @@ namespace MyCms.Domain.Dto
         /// تعداد کامنت ها
         /// </summary>
         public int NewsCommentCount { get; set; }
+
+        /// <summary>
+        /// آدرس عکس برای نمایش
+        /// </summary>
+        public string ImageDestination { get; set; }
     }
 }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyCms.Core.ViewModels;
+﻿using MyCms.Core.ViewModels;
 using MyCms.Domain.Dto;
-using MyCms.Domain.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyCms.Core.Interfaces
 {
@@ -27,6 +23,10 @@ namespace MyCms.Core.Interfaces
         /// <returns></returns>
         Task<PagedResult<CategoryDto, CategorySearchItem>> GetCategoryByPaging(CategorySearchItem item);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         Task<List<CategoryDetailDto>> GetCategoryWIthFirstNews();
 
         Task<List<CategoryDetailWithTopFiveNewsDto>> GetCategoryWithTopFiveNews();

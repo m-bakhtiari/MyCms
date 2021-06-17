@@ -24,7 +24,8 @@ namespace MyCms.Core.Mapper
                 Description = newsViewModel.Description,
                 ShortDescription = newsViewModel.ShortDescription,
                 Title = newsViewModel.Title,
-                Tags = newsViewModel.Tags
+                Tags = newsViewModel.Tags,
+                ImageName = newsViewModel.ImageName
             };
         }
 

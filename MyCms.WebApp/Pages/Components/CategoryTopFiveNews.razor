@@ -11,7 +11,7 @@
         <div class="col-lg-6">
             <article class="entry thumb thumb--size-2">
                 <div class="entry__img-holder thumb__img-holder"
-                     style="background-image: url(@(FirstNews.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+FirstNews.ImageName:"img/NewsImage/no-image-available.png"));">
+                     style="background-image: url(img/NewsImage/@(string.IsNullOrWhiteSpace(FirstNews.ImageName)==false?FirstNews.ImageName:"no-image-available.png"));">
                     <div class="bottom-gradient"></div>
                     <div class="thumb-text-holder thumb-text-holder--1">
                         <h2 class="thumb-entry-title">

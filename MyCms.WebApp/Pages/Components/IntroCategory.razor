@@ -1,13 +1,14 @@
 ﻿@using MyCms.Domain.Dto
 @using MyCms.WebApp.Extensions
-@using MyCms.WebApp.Models
 
 <div class="col-lg-6">
     <div class="featured-posts-grid__item featured-posts-grid__item--sm">
         <article class="entry card post-list featured-posts-grid__entry">
-            <div class="entry__img-holder post-list__img-holder card__img-holder" style="background-image: url(@(Dto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+Dto.ImageName:"img/NewsImage/no-image-available.png"))">
+            <div class="entry__img-holder post-list__img-holder card__img-holder"
+                 style="background-image: url(img/NewsImage/@(string.IsNullOrWhiteSpace(Dto.ImageName)==false?Dto.ImageName:"no-image-available.png"))">
                 <a href="/NewsDetails/@Dto.NewsId" class="thumb-url"></a>
-                <img src="@(Dto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+Dto.ImageName:"img/NewsImage/no-image-available.png")" alt="image news" class="entry__img d-none">
+                <img src="img/NewsImage/@(string.IsNullOrWhiteSpace(Dto.ImageName)==false?Dto.ImageName:"no-image-available.png")" 
+                     alt="image news" class="entry__img d-none">
                 <a href="/NewsDetails/@Dto.NewsId" class="entry__meta-category entry__meta-category--label entry__meta-category--align-in-corner entry__meta-category--violet">
                     @Dto.CategoryTitle
                 </a>
@@ -18,7 +19,7 @@
                 </h2>
                 <ul class="entry__meta">
                     <li class="entry__meta-date">
-                        @Dto.NewsDate.ToShamsiWithMonthName()
+                        @*@Dto.NewsDate.ToShamsiWithMonthName()*@
                     </li>
                 </ul>
             </div>

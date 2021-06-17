@@ -24,7 +24,7 @@ namespace MyCms.Api.Controllers
         #endregion
 
         /// <summary>
-        /// گرفتن تمام عنوان دسته بندی اخبار 
+        /// Get all category data with news count 
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -37,7 +37,11 @@ namespace MyCms.Api.Controllers
             return Ok(res);
         }
 
-        // GET: api/Category/5
+        /// <summary>
+        /// Get one category by category id
+        /// </summary>
+        /// <param name="id">Category id</param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetCategory(int id)
@@ -52,8 +56,12 @@ namespace MyCms.Api.Controllers
             return Ok(category);
         }
 
-        // PUT: api/Category/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Edit one category
+        /// </summary>
+        /// <param name="id">category id that want to edit</param>
+        /// <param name="categoryViewModel">Json object for create category</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         [PermissionChecker]
         public async Task<IActionResult> PutCategory(int id, CategoryViewModel categoryViewModel)
@@ -72,9 +80,9 @@ namespace MyCms.Api.Controllers
         }
 
         /// <summary>
-        /// ایجاد دسته بندی خبر جدید
+        /// Create new category
         /// </summary>
-        /// <param name="categoryViewModel"></param>
+        /// <param name="categoryViewModel">Json object for create category</param>
         /// <returns></returns>
         [HttpPost]
         [PermissionChecker]
@@ -88,7 +96,11 @@ namespace MyCms.Api.Controllers
             return Ok();
         }
 
-        // DELETE: api/Category/5
+        /// <summary>
+        /// Delete one category by category id
+        /// </summary>
+        /// <param name="id">Category id</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         [PermissionChecker]
         public async Task<IActionResult> DeleteCategory(int id)

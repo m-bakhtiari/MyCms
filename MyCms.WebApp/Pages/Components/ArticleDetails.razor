@@ -1,5 +1,5 @@
 ﻿@using MyCms.Domain.Dto
-@using MyCms.WebApp.Models
+@using MyCms.WebApp.Extensions
 
 <article class="entry mb-0">
     <div class="single-post__entry-header entry__header">
@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="entry__img-holder">
-        <img src="@(NewsDto.ImageName!=null?Const.ApiSiteUrl+"/"+Const.NewsImageLocation+"/"+NewsDto.ImageName:"img/NewsImage/no-image-available.png")"
+        <img src="img/NewsImage/@(string.IsNullOrWhiteSpace(NewsDto.ImageName)==false?NewsDto.ImageName:"no-image-available.png")"
              alt="image news" class="entry__im">
     </div>
     <div class="entry__article-wrap">

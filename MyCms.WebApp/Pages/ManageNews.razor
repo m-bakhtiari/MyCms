@@ -35,13 +35,13 @@
             {
                 <tr>
                     <td>@(counter++)</td>
-                    <td><img src="" alt="" /></td>
+                    <td><img src="img/NewsImage/@item.ImageName" alt="@item.ImageName" class="img-thumbnail rounded"/></td>
                     <td>@item.Title</td>
                     <td>@item.ShortDescription</td>
                     <td>@item.Tags</td>
                     <td>
-                        <a class="btn bg-warning text-dark" href="/AddOrEditNews/@EditTitle/@Id/@item.CategoryId">Edit</a>
-                        <a class="btn bg-danger" @onclick="()=>DeleteNews.Open(item.Id)">Delete</a>
+                        <a class="btn bg-warning text-dark" href="/AddOrEditNews/@EditTitle/@item.CategoryId/@item.Id">Edit</a>
+                        <a class="btn bg-danger" @onclick="()=>DeleteNews.Open(item.Id,item.CategoryId)">Delete</a>
                     </td>
                 </tr>
             }
@@ -74,8 +74,8 @@
     public NewsViewModel NewsVm { get; set; } = new NewsViewModel();
     private int PageCount { get; set; }
     private int PageId { get; set; } = 1;
-    public string Title { get; set; } = "ایجاد خبر جدید";
-    public string EditTitle { get; set; } = "ویرایش خبر";
+    public string Title { get; set; } = "Create New News";
+    public string EditTitle { get; set; } = "Edit News";
 
     protected override async Task OnParametersSetAsync()
     {

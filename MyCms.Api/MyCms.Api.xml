@@ -6,21 +6,50 @@
     <members>
         <member name="M:MyCms.Api.Controllers.CategoryController.GetCategory">
             <summary>
-            گرفتن تمام عنوان دسته بندی اخبار 
+            Get all category data with news count 
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyCms.Api.Controllers.CategoryController.GetCategory(System.Int32)">
+            <summary>
+            Get one category by category id
+            </summary>
+            <param name="id">Category id</param>
+            <returns></returns>
+        </member>
+        <member name="M:MyCms.Api.Controllers.CategoryController.PutCategory(System.Int32,MyCms.Core.ViewModels.CategoryViewModel)">
+            <summary>
+            Edit one category
+            </summary>
+            <param name="id">category id that want to edit</param>
+            <param name="categoryViewModel">Json object for create category</param>
             <returns></returns>
         </member>
         <member name="M:MyCms.Api.Controllers.CategoryController.PostCategory(MyCms.Core.ViewModels.CategoryViewModel)">
             <summary>
-            ایجاد دسته بندی خبر جدید
+            Create new category
             </summary>
-            <param name="categoryViewModel"></param>
+            <param name="categoryViewModel">Json object for create category</param>
+            <returns></returns>
+        </member>
+        <member name="M:MyCms.Api.Controllers.CategoryController.DeleteCategory(System.Int32)">
+            <summary>
+            Delete one category by category id
+            </summary>
+            <param name="id">Category id</param>
             <returns></returns>
         </member>
         <member name="M:MyCms.Api.Controllers.CategoryNewsController.GetCategoryWithFirstNews">
             <summary>
             گرفتن لیست گروه ها به همراه تازه ترین خبر آنها
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyCms.Api.Controllers.FileController.PostNews(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            ذخیره عکس در فایل روت در بلیزر
+            </summary>
+            <param name="image"></param>
             <returns></returns>
         </member>
         <member name="M:MyCms.Api.Controllers.FilterCategoryController.GetCategory(MyCms.Domain.Dto.CategorySearchItem)">
