@@ -1,5 +1,3 @@
-using System.IO;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,12 +5,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using MyCms.Data.Context;
+using MyCms.Data.Mongo;
 using MyCms.Extensions.Consts;
 using MyCms.IoC.DependencyInjections;
+using System.IO;
+using System.Text;
 
 namespace MyCms.Api
 {
@@ -35,6 +38,19 @@ namespace MyCms.Api
                 options.UseSqlServer(Configuration.GetConnectionString("MyCmsConnection"));
             });
 
+            services.Configure<MongoOptions>(Configuration.GetSection("Mongo"));
+            services.AddSingleton<MongoClient>(c =>
+            {
+                var options = c.GetService<IOptions<MongoOptions>>();
+                return new MongoClient(options.Value.ConnectionString);
+            });
+
+            services.AddScoped<IMongoDatabase>(c =>
+            {
+                var options = c.GetService<IOptions<MongoOptions>>();
+                var client = c.GetService<MongoClient>();
+                return client.GetDatabase(options.Value.Database);
+            });
             #endregion
 
             services.AddControllers();
@@ -127,6 +143,7 @@ namespace MyCms.Api
             {
                 endpoints.MapControllers();
             });
+            app.ApplicationServices.GetService<IDatabaseInitializer>().InitializerAsync();
         }
 
         public static void RegisterServices(IServiceCollection service)
