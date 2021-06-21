@@ -1,9 +1,13 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
+using MongoDB.Bson;
 
 namespace MyCms.Domain.Entities
 {
     public class Slider
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public Guid Id { get; set; }
         public string ImageName { get; set; }
         public int Position { get; set; }

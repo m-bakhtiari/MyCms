@@ -5,32 +5,42 @@ using MyCms.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MyCms.Extensions.Consts;
 
 namespace MyCms.Data.Repositories
 {
     public class SliderRepository : ISliderRepository
     {
-        private readonly IMongoDatabase _database;
-
-        public SliderRepository(IMongoDatabase database)
+        public async Task AddSlider(Slider slider)
         {
-            _database = database;
+            var client = new MongoClient(Const.MongoDatabaseConnection);
+            var db = client.GetDatabase("MyCmsSlider");
+            var sliderCollection = db.GetCollection<Slider>("Sliders");
+            await sliderCollection.InsertOneAsync(slider);
         }
 
-        public async Task AddSlider(Slider slider) => await Collection.InsertOneAsync(slider);
-        public async Task DeleteSlider(Guid sliderId) => await Collection.DeleteOneAsync(x => x.Id == sliderId);
-
-        public async Task<List<Slider>> GetAll() => await Collection.AsQueryable().ToListAsync();
-
-
-        public async Task<Slider> GetSliderById(Guid sliderId) => await Collection.AsQueryable().FirstOrDefaultAsync(x=>x.Id==sliderId);
-
-
-        public async Task UpdateSlider(Slider slider)
+        public Task DeleteSlider(Guid sliderId)
         {
             throw new NotImplementedException();
         }
 
-        private IMongoCollection<Slider> Collection => _database.GetCollection<Slider>("Sliders");
+        public async Task<List<Slider>> GetAll()
+        {
+            var client = new MongoClient(Const.MongoDatabaseConnection);
+            var db = client.GetDatabase("MyCmsSlider");
+            var slider = db.GetCollection<Slider>("Sliders");
+            var result = await slider.FindAsync(FilterDefinition<Slider>.Empty);
+            return result.ToList();
+        }
+
+        public async Task<Slider> GetSliderById(Guid sliderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateSlider(Slider slider)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

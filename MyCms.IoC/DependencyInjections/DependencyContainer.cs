@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyCms.Core.Interfaces;
 using MyCms.Core.Services;
-using MyCms.Data.Mongo;
 using MyCms.Data.Repositories;
 using MyCms.Domain.Interfaces;
 
@@ -16,6 +15,7 @@ namespace MyCms.IoC.DependencyInjections
             service.AddScoped<ICategoryService, CategoryService>();
             service.AddScoped<IUserService, UserService>();
             service.AddScoped<INewsService, NewsService>();
+            service.AddScoped<ISliderService, SliderService>();
 
             #endregion
 
@@ -28,9 +28,7 @@ namespace MyCms.IoC.DependencyInjections
             service.AddScoped<INewsRepository, NewsRepository>();
             service.AddScoped<INewsLikeRepository, NewsLikeRepository>();
             service.AddScoped<INewsCommentRepository, NewsCommentRepository>();
-            service.AddScoped<IDatabaseInitializer, MongoInitializer>();
             service.AddScoped<ISliderRepository, SliderRepository>();
-            service.AddScoped<IDatabaseSeeder, MongoSeeder>();
 
             #endregion
         }
