@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyCms.Core.Interfaces;
+﻿using MyCms.Core.Interfaces;
 using MyCms.Core.ViewModels;
 using MyCms.Domain.Entities;
 using MyCms.Domain.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace MyCms.Core.Services
 {
@@ -19,27 +18,28 @@ namespace MyCms.Core.Services
             _sliderRepository = sliderRepository;
         }
 
-        public async Task<OpRes> AddSlider(Slider slider)
-        {
-            await _sliderRepository.AddSlider(new Slider("Test", 1));
-            return OpRes.BuildSuccess();
-        }
-
-        public Task<OpRes> DeleteSlider(Guid sliderId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<Slider>> GetAll()
         {
             return await _sliderRepository.GetAll();
         }
 
-        public Task<Slider> GetSliderBySliderId(Guid sliderId)
+        public async Task<Slider> GetSliderBySliderId(ObjectId sliderId)
+        {
+            return await _sliderRepository.GetSliderById(sliderId);
+        }
+
+        public async Task<OpRes> AddSlider(Slider slider)
+        {
+            //TODO add image
+            //TODO validation not be null for image name
+            //TODO add in slider collection
+
+            throw new NotImplementedException();
+        }
+        public async Task<OpRes> DeleteSlider(ObjectId sliderId)
         {
             throw new NotImplementedException();
         }
-
         public Task<OpRes> UpdateSlider(Slider slider)
         {
             throw new NotImplementedException();

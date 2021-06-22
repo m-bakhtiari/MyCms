@@ -14,6 +14,7 @@ namespace MyCms.Extensions.Consts
         public const string SiteUrlHttp = "http://localhost:53221";
         public const string VerifyCodeJwt = "this is my custom Secret key for authnetication";
         public const string NewsImageLocation = "wwwroot/img/NewsImage";
-        public const string MongoDatabaseConnection = "mongodb://localhost:27017";
+        public const string SliderCollection = "Sliders";
+        public const string MongoDatabaseName = "MyCmsSlider";
     }
 }

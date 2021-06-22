@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using MyCms.Data.Context;
 using MyCms.Extensions.Consts;
 using MyCms.IoC.DependencyInjections;
@@ -33,6 +34,12 @@ namespace MyCms.Api
             services.AddDbContext<MyCmsContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MyCmsConnection"));
+            });
+
+            services.AddSingleton<IMongoClient, MongoClient>(s =>
+            {
+                var uri = s.GetRequiredService<IConfiguration>()["MongoUri"];
+                return new MongoClient(uri);
             });
             #endregion
 
@@ -82,7 +89,7 @@ namespace MyCms.Api
                     builder.AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        //.AllowCredentials()
+                    //.AllowCredentials()
                     .Build();
                 });
             });

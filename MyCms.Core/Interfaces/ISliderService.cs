@@ -3,6 +3,7 @@ using MyCms.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace MyCms.Core.Interfaces
 {
@@ -11,7 +12,7 @@ namespace MyCms.Core.Interfaces
        Task<OpRes> AddSlider(Slider slider);
        Task<OpRes> UpdateSlider(Slider slider);
        Task<List<Slider>> GetAll();
-       Task<Slider> GetSliderBySliderId(Guid sliderId);
-       Task<OpRes> DeleteSlider(Guid sliderId);
+       Task<Slider> GetSliderBySliderId(ObjectId sliderId);
+       Task<OpRes> DeleteSlider(ObjectId sliderId);
    }
 }

@@ -1,46 +1,49 @@
 ﻿using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using MyCms.Domain.Entities;
 using MyCms.Domain.Interfaces;
+using MyCms.Extensions.Consts;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MyCms.Extensions.Consts;
+using MongoDB.Bson;
 
 namespace MyCms.Data.Repositories
 {
     public class SliderRepository : ISliderRepository
     {
-        public async Task AddSlider(Slider slider)
+        private readonly IMongoCollection<Slider> _sliderCollection;
+
+        public SliderRepository(IMongoClient mongoClient)
         {
-            var client = new MongoClient(Const.MongoDatabaseConnection);
-            var db = client.GetDatabase("MyCmsSlider");
-            var sliderCollection = db.GetCollection<Slider>("Sliders");
-            await sliderCollection.InsertOneAsync(slider);
+            var db = mongoClient.GetDatabase(Const.MongoDatabaseName);
+            _sliderCollection = db.GetCollection<Slider>(Const.SliderCollection);
         }
 
-        public Task DeleteSlider(Guid sliderId)
+        public async Task AddSlider(Slider slider)
         {
-            throw new NotImplementedException();
+            await _sliderCollection.InsertOneAsync(slider);
+        }
+
+        public async Task DeleteSlider(ObjectId sliderId)
+        {
+            await _sliderCollection.DeleteOneAsync(s => s.Id == sliderId);
         }
 
         public async Task<List<Slider>> GetAll()
         {
-            var client = new MongoClient(Const.MongoDatabaseConnection);
-            var db = client.GetDatabase("MyCmsSlider");
-            var slider = db.GetCollection<Slider>("Sliders");
-            var result = await slider.FindAsync(FilterDefinition<Slider>.Empty);
+            var result = await _sliderCollection.FindAsync(FilterDefinition<Slider>.Empty);
             return result.ToList();
         }
 
-        public async Task<Slider> GetSliderById(Guid sliderId)
+        public async Task<Slider> GetSliderById(ObjectId sliderId)
         {
-            throw new NotImplementedException();
+            var result = await _sliderCollection.FindAsync(s => s.Id == sliderId);
+            return await result.FirstOrDefaultAsync();
         }
 
-        public Task UpdateSlider(Slider slider)
+        public async Task UpdateSlider(Slider slider)
         {
-            throw new NotImplementedException();
+            await _sliderCollection.ReplaceOneAsync(s => s.Id == slider.Id, slider);
         }
     }
 }
