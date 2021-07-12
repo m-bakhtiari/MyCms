@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
+using MongoDB.Bson;
 
 namespace MyCms.Domain.Dto
 {
     public class SliderDto
     {
-        public string ImageName { get; set; }
+        public IFormFile ImageName { get; set; }
+        public int? Position { get; set; }
+    }
+
+    public class SliderUpdateDto
+    {
+        public ObjectId sliderId { get; set; }
         public int? Position { get; set; }
     }
 }

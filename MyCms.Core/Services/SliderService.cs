@@ -6,16 +6,19 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using MyCms.Domain.Dto;
 
 namespace MyCms.Core.Services
 {
     public class SliderService : ISliderService
     {
         private readonly ISliderRepository _sliderRepository;
+        private readonly INewsService _newsService;
 
-        public SliderService(ISliderRepository sliderRepository)
+        public SliderService(ISliderRepository sliderRepository, INewsService newsService)
         {
             _sliderRepository = sliderRepository;
+            _newsService = newsService;
         }
 
         public async Task<List<Slider>> GetAll()
@@ -28,21 +31,38 @@ namespace MyCms.Core.Services
             return await _sliderRepository.GetSliderById(sliderId);
         }
 
-        public async Task<OpRes> AddSlider(Slider slider)
+        public async Task<OpRes> AddSlider(SliderDto slider)
         {
-            //TODO add image
-            //TODO validation not be null for image name
-            //TODO add in slider collection
-
-            throw new NotImplementedException();
+            var imageName = await _newsService.AddProductImage(slider.ImageName);
+            if (slider.Position == null)
+            {
+                slider.Position = 0;
+            }
+            var model = new Slider(imageName, slider.Position);
+            await _sliderRepository.AddSlider(model);
+            return OpRes.BuildSuccess();
         }
         public async Task<OpRes> DeleteSlider(ObjectId sliderId)
         {
-            throw new NotImplementedException();
+            var slider = await _sliderRepository.GetSliderById(sliderId);
+            if (slider == null)
+            {
+                return OpRes.BuildError("موردی یافت نشد");
+            }
+            await _sliderRepository.DeleteSlider(sliderId);
+            return OpRes.BuildSuccess();
         }
-        public Task<OpRes> UpdateSlider(Slider slider)
+        public async Task<OpRes> UpdateSlider(SliderUpdateDto slider)
         {
-            throw new NotImplementedException();
+            var model = await _sliderRepository.GetSliderById(slider.sliderId);
+            if (model==null)
+            {
+                return OpRes.BuildError("موردی یافت نشد");
+            }
+            model.Position = slider.Position.HasValue ? slider.Position.Value : 0;
+
+            await _sliderRepository.UpdateSlider(model);
+            return OpRes.BuildSuccess();
         }
     }
 }

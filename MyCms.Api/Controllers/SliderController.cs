@@ -32,7 +32,7 @@ namespace MyCms.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSlider(SliderDto sliderDto)
+        public async Task<IActionResult> UpdateSlider(SliderUpdateDto sliderDto)
         {
             await _sliderService.UpdateSlider(sliderDto);
             return Ok();
