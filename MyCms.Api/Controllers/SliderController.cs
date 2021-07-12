@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using MyCms.Core.Interfaces;
-using MyCms.Domain.Entities;
+using MyCms.Domain.Dto;
+using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace MyCms.Api.Controllers
 {
@@ -28,9 +25,30 @@ namespace MyCms.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSliders()
+        public async Task<IActionResult> AddSlider(SliderDto sliderDto)
         {
-            await _sliderService.AddSlider(new Slider());
+            await _sliderService.AddSlider(sliderDto);
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutSlider(SliderDto sliderDto)
+        {
+            await _sliderService.UpdateSlider(sliderDto);
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSliderById(ObjectId id)
+        {
+            var res = await _sliderService.GetSliderBySliderId(id);
+            return Ok(res);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSliderById(ObjectId id)
+        {
+            var res = await _sliderService.DeleteSlider(id);
             return Ok();
         }
     }
