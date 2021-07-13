@@ -1,0 +1,107 @@
+﻿@page "/AddOrEditSlider/{Title}/{Id?}"
+
+@using MyCms.WebApp.Models
+@using System.Text
+@using System.Text.Json
+@using System.Net.Http.Headers
+@using System.Net
+@using MyCms.Domain.Dto
+@using MyCms.WebApp.Services.Interfaces
+@using Tewr.Blazor.FileReader
+@using System.IO
+@using MongoDB.Bson
+@inject ILocalStorageService _localStorageService
+@inject NavigationManager _navigationManager
+@inject IFileReaderService _fileReaderService;
+
+<LoginModal @ref="@LoginModal"></LoginModal>
+<div class="container mt-4">
+    <h3>@Title</h3>
+    <div class="row">
+        <label>عنوان</label>
+        <input type="hidden" @bind="Slider.SliderId" />
+    </div>
+    <div class="row">
+        <label>کلمات کلیدی</label>
+        <input type="number" class="form-group" @bind="Slider.Position" />
+    </div>
+    <div class="row">
+        <button type="button" class="btn bg-success" @onclick="SubmitForm">ذخیره</button>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    private SliderUpdateDto Slider { get; set; } = new SliderUpdateDto();
+    private LoginModal LoginModal { get; set; }
+    public SliderDto SliderDto { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = Title;
+        SliderDto = await _http.GetFromJsonAsync<SliderDto>(Const.ApiSiteUrl + "/api/Slider");
+    }
+
+    private async Task SubmitForm()
+    {
+        Slider.SliderId ??= ObjectId.GenerateNewId();
+        var request = new HttpRequestMessage()
+        {
+            Content = new StringContent(JsonSerializer.Serialize(Slider), Encoding.UTF8, "application/json"),
+        };
+        if (Slider.SliderId == ObjectId.Empty)
+        {
+            request.Method = new HttpMethod("POST");
+            request.RequestUri = new Uri(Const.ApiSiteUrl + "/api/Slider");
+        }
+        else
+        {
+            request.Method = new HttpMethod("PUT");
+            request.RequestUri = new Uri(Const.ApiSiteUrl + $"/api/Slider/{Slider.SliderId}");
+        }
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _localStorageService.GetItem<string>("Token"));
+        using var response = await _http.SendAsync(request);
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            LoginModal.Open();
+        }
+        else if (response.StatusCode == HttpStatusCode.OK)
+        {
+            _navigationManager.NavigateTo($"/ManageSlider/{SliderDto}", true);
+        }
+    }
+
+    private ElementReference _elementReference = new ElementReference();
+    private readonly string _message = string.Empty;
+    private string _fileName = string.Empty;
+    private string _size = string.Empty;
+    private string _imagePath = null;
+    private Stream _fileStream = null;
+
+    private async Task OpenFileAsync()
+    {
+        var file = (await _fileReaderService.CreateReference(_elementReference).EnumerateFilesAsync()).FirstOrDefault();
+        if (file == null) return;
+        var fileInfo = await file.ReadFileInfoAsync();
+        _fileName = fileInfo.Name;
+        _size = fileInfo.Size.ToString();
+        await using var memoryStream = await file.CreateMemoryStreamAsync((int)fileInfo.Size);
+        _fileStream = new MemoryStream(memoryStream.ToArray());
+    }
+
+    private async Task UploadFileAsync()
+    {
+        var content = new MultipartFormDataContent();
+        content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-date");
+        content.Add(new StreamContent(_fileStream, (int)_fileStream.Length), "image", _fileName);
+        var response = await _http.PostAsync(Const.ApiSiteUrl + "/api/File", content);
+        Slider.ImageName = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(Slider.ImageName);
+    }
+}

@@ -54,7 +54,7 @@ namespace MyCms.Core.Services
         }
         public async Task<OpRes> UpdateSlider(SliderUpdateDto slider)
         {
-            var model = await _sliderRepository.GetSliderById(slider.sliderId);
+            var model = await _sliderRepository.GetSliderById(slider.SliderId);
             if (model==null)
             {
                 return OpRes.BuildError("موردی یافت نشد");

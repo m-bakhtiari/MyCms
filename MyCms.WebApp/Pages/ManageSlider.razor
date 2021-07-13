@@ -1,0 +1,90 @@
+﻿@page "/ManageSlider"
+
+@using MyCms.Domain.Dto
+@using MyCms.WebApp.Models
+@using System.Text.Json
+@using System.Text
+@using System.Net.Http.Headers
+@using MyCms.WebApp.Services.Interfaces
+@using System.Net
+@inject ILocalStorageService _localStorageService
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+@{var counter = 1;}
+<LoginModal @ref="@LoginModal"></LoginModal>
+<AddOrEditSlider @ref="AddOrEditSlider"></AddOrEditSlider>
+<DeleteSlider @ref="DeleteSlider"></DeleteSlider>
+<div class="container mt-4">
+    <h3>لیست دسته بندی اخبار</h3>
+    <div>
+        <a class="btn bg-success text-white" @onclick="()=>AddOrEditSlider.Open()">Add</a>
+    </div>
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>عکس</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Result)
+            {
+            <tr>
+                <td>
+                    @(counter++)
+                </td>
+                <td><img src="img/NewsImage/@item.ImageName" alt="@item.ImageName" class="img-thumbnail rounded" /></td>
+                <td>
+                    <a class="btn bg-warning" @onclick="()=>AddOrEditSlider.Open()">Edit</a>
+                    <a class="btn bg-danger" @onclick="()=>DeleteSlider.Open(item.Id)">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-right">
+                    <nav class="pagination">
+                        @for (var i = 1; i <= PageCount; i++)
+                        {
+                            var j = i;
+                            <a style="cursor: pointer" class="pagination__page
+                           @(PageId==i?"pagination__page--current text-light":"") fw-bold" @onclick="()=>MoveToPage(j)">@i</a>
+                    }
+                    </nav>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+@code {
+    public List<SliderDto> Result { get; set; } = new List<SliderDto>();
+    private LoginModal LoginModal { get; set; }
+    public AddOrEditSlider AddOrEditSlider { get; set; } = new AddOrEditSlider();
+    public DeleteSlider DeleteSlider { get; set; } = new DeleteSlider();
+    private int PageCount { get; set; }
+    private int PageId { get; set; } = 1;
+    public string Title { get; set; } = "ایجاد گروه جدید";
+    public string EditTitle { get; set; } = "ایجاد گروه جدید";
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetPageData();
+    }
+
+    private async Task MoveToPage(int pageId)
+    {
+        PageId = pageId;
+        await GetPageData();
+    }
+
+    private async Task GetPageData()
+    {
+        Result =await _http.GetFromJsonAsync<List<SliderDto>>(Const.ApiSiteUrl + "/api/Slider");
+    }
+}

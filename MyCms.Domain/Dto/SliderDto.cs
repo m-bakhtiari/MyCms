@@ -11,7 +11,10 @@ namespace MyCms.Domain.Dto
 
     public class SliderUpdateDto
     {
-        public ObjectId sliderId { get; set; }
+        public ObjectId? SliderId { get; set; }
         public int? Position { get; set; }
+
+        public IFormFile ImageName { get; set; }
+
     }
 }
