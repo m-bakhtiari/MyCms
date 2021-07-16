@@ -41,6 +41,28 @@
     private SliderUpdateDto Slider { get; set; } = new SliderUpdateDto();
     private LoginModal LoginModal { get; set; }
     public SliderDto SliderDto { get; set; }
+    private Guid Guid = Guid.NewGuid();
+    private string ModalDisplay = "none;";
+    private string ModalClass = "";
+    private bool ShowBackdrop = false;
+
+    public void Open(string title, CategoryViewModel category)
+    {
+        Title = title;
+
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    private void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -102,6 +124,5 @@
         content.Add(new StreamContent(_fileStream, (int)_fileStream.Length), "image", _fileName);
         var response = await _http.PostAsync(Const.ApiSiteUrl + "/api/File", content);
         Slider.ImageName = await response.Content.ReadAsStringAsync();
-        Console.WriteLine(Slider.ImageName);
     }
 }

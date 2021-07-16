@@ -146,6 +146,5 @@
         content.Add(new StreamContent(_fileStream, (int)_fileStream.Length), "image", _fileName);
         var response = await _http.PostAsync(Const.ApiSiteUrl + "/api/File", content);
         News.ImageName = await response.Content.ReadAsStringAsync();
-        Console.WriteLine(News.ImageName);
     }
 }

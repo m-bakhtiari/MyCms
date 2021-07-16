@@ -37,7 +37,7 @@
                 </td>
                 <td><img src="img/NewsImage/@item.ImageName" alt="@item.ImageName" class="img-thumbnail rounded" /></td>
                 <td>
-                    <a class="btn bg-warning" @onclick="()=>AddOrEditSlider.Open()">Edit</a>
+                    <a class="btn bg-warning" @onclick="()=>AddOrEditSlider.Open(item.SliderId)">Edit</a>
                     <a class="btn bg-danger" @onclick="()=>DeleteSlider.Open(item.Id)">Delete</a>
                 </td>
             </tr>
